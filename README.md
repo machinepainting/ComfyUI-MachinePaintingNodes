@@ -4,8 +4,6 @@
 
 A growing collection of high-quality custom nodes focused on precise color correction, advanced image blending, boolean/conditional logic, and workflow utilities.
 
-Perfect for ComfyUI users who want Photoshop-like control in their AI painting pipelines.
-
 ![MachinePainting Nodes Overview](images/MachinePaintingNodes.png)
 
 ## Features & Nodes
@@ -80,7 +78,7 @@ Blend two images with **Photoshop-grade modes**.
 
 `blend_amount`: 0.0 (image1) → 1.0 (image2)
 
-### Boolean & Utility Nodes (New Additions)
+### Boolean & Utility Nodes
 These help create cleaner, more conditional workflows without spaghetti.
 
 - **Boolean Master Switch**: One boolean to rule them all — bypass or activate whole sections.
