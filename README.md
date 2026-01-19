@@ -6,7 +6,8 @@ A growing collection of high-quality custom nodes focused on precise color corre
 
 Perfect for ComfyUI users who want Photoshop-like control in their AI painting pipelines.
 
-![Nodes Preview]([screenshots/seed-boolean-lock-example.png](https://github.com/machinepainting/ComfyUI-MachinePaintingNodes/blob/main/images/MachinePaintingNodes.png?raw=true))
+![MachinePainting Nodes Overview](images/MachinePaintingNodes.png)
+
 ## Features & Nodes
 
 ### Color & Blending Tools
