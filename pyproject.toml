@@ -1,0 +1,14 @@
+[project]
+name = "comfyui-machinepainting-nodes"
+description = "Color correction, advanced image blending, and boolean/utility nodes for ComfyUI. Includes ColorAdjustBlend, ColorMatchBlend, ImageBlendPro, Boolean switches, and more."
+version = "1.0.0"
+license = { file = "LICENSE" }
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/machinepainting/ComfyUI-MachinePaintingNodes"
+
+[tool.comfy]
+PublisherId = "machinepainting"
+DisplayName = "MachinePainting Nodes"
+Icon = ""
