@@ -1,7 +1,5 @@
 # ComfyUI-MachinePaintingNodes
 
-![MachinePaintingNodes](images/MachinePaintingNodes.png)
-
 **Professional color grading, mask tools, and utilities for ComfyUI**
 
 A comprehensive node suite for professional level image processing, color correction, and advanced workflow enhancement utilities. 
