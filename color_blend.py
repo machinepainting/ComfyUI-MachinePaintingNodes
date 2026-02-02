@@ -3,101 +3,315 @@ import numpy as np
 import cv2
 
 class ColorMatchBlend:
-    """
-    Match colors from a reference image to a target image with blending options.
-    """
+    
+    BLEND_MODES = ["normal", "overlay", "multiply", "screen", "soft_light", 
+                   "hard_light", "color", "luminosity", "darken", "lighten"]
+    
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "target": ("IMAGE",),
-                "reference": ("IMAGE",),
+                "target_image": ("IMAGE",),
+                "reference_image": ("IMAGE",),
+                "strength": ("FLOAT", {"default": 0.75, "min": 0.0, "max": 1.0, "step": 0.05, "display": "slider"}),
+                "enable_match_blend": ("BOOLEAN", {"default": True}),
+                "saturation": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 5.0, "display": "slider"}),
             },
             "optional": {
-                "strength": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.05, "display": "slider"}),
-                "color_space": (["lab", "rgb", "hsv"], {"default": "lab"}),
-                "match_mean": ("BOOLEAN", {"default": True}),
-                "match_std": ("BOOLEAN", {"default": True}),
+                "match_method": (["statistical", "histogram", "reinhard"], {
+                    "default": "statistical"
+                }),
+                "blend_mode": (cls.BLEND_MODES, {"default": "normal"}),
+                "luminance_match": ("FLOAT", {
+                    "default": 0.0, 
+                    "min": 0.0, 
+                    "max": 1.0, 
+                    "step": 0.05,
+                    "display": "slider"
+                }),
+                "color_match": ("FLOAT", {
+                    "default": 1.0, 
+                    "min": 0.0, 
+                    "max": 1.0, 
+                    "step": 0.05,
+                    "display": "slider"
+                }),
             }
         }
 
     RETURN_TYPES = ("IMAGE",)
-    FUNCTION = "match_colors"
+    FUNCTION = "apply_color_match_blend"
     CATEGORY = "MachinePaintingNodes"
 
-    def match_colors(self, target, reference, strength=1.0, color_space="lab", 
-                     match_mean=True, match_std=True):
-        target_img = target[0].cpu().numpy()
-        ref_img = reference[0].cpu().numpy()
+    def apply_color_match_blend(self, target_image, reference_image, strength, 
+                                 enable_match_blend, saturation,
+                                 match_method="statistical", blend_mode="normal",
+                                 luminance_match=0.0, color_match=1.0):
         
-        original = target_img.copy()
-        
-        # Convert to uint8 for color space conversion
-        target_uint8 = (target_img * 255).astype(np.uint8)
-        ref_uint8 = (ref_img * 255).astype(np.uint8)
-        
-        # Resize reference if needed
-        if ref_uint8.shape[:2] != target_uint8.shape[:2]:
-            ref_uint8 = cv2.resize(ref_uint8, (target_uint8.shape[1], target_uint8.shape[0]))
-        
-        if color_space == "lab":
-            target_cvt = cv2.cvtColor(target_uint8, cv2.COLOR_RGB2LAB).astype(np.float32)
-            ref_cvt = cv2.cvtColor(ref_uint8, cv2.COLOR_RGB2LAB).astype(np.float32)
-        elif color_space == "hsv":
-            target_cvt = cv2.cvtColor(target_uint8, cv2.COLOR_RGB2HSV).astype(np.float32)
-            ref_cvt = cv2.cvtColor(ref_uint8, cv2.COLOR_RGB2HSV).astype(np.float32)
+        target = (target_image[0].cpu().numpy() * 255).astype(np.uint8)
+        h, w = target.shape[:2]
+        target_bgr = cv2.cvtColor(target, cv2.COLOR_RGB2BGR)
+
+        if enable_match_blend and strength > 0:
+            reference = (reference_image[0].cpu().numpy() * 255).astype(np.uint8)
+            reference_bgr = cv2.cvtColor(reference, cv2.COLOR_RGB2BGR)
+            
+            # Resize reference to match target
+            if reference_bgr.shape[:2] != target_bgr.shape[:2]:
+                reference_bgr = cv2.resize(reference_bgr, (w, h))
+            
+            if match_method == "statistical":
+                matched = self.statistical_lab_match(target_bgr, reference_bgr, 
+                                                     luminance_match, color_match)
+            elif match_method == "histogram":
+                matched = self.histogram_lab_match(target_bgr, reference_bgr,
+                                                   luminance_match, color_match)
+            else:  # reinhard
+                matched = self.reinhard_color_transfer(target_bgr, reference_bgr,
+                                                       luminance_match, color_match)
+            
+            # Apply blend mode
+            if blend_mode != "normal":
+                matched = self.apply_blend_mode(target_bgr, matched, blend_mode)
+            
+            result = cv2.addWeighted(target_bgr, 1 - strength, matched, strength, 0)
         else:
-            target_cvt = target_uint8.astype(np.float32)
-            ref_cvt = ref_uint8.astype(np.float32)
+            result = target_bgr
+
+        result = self.apply_saturation(result, saturation)
         
-        result = target_cvt.copy()
-        
-        for c in range(3):
-            target_mean = target_cvt[:, :, c].mean()
-            target_std = target_cvt[:, :, c].std() + 1e-6
-            ref_mean = ref_cvt[:, :, c].mean()
-            ref_std = ref_cvt[:, :, c].std() + 1e-6
-            
-            channel = target_cvt[:, :, c]
-            
-            if match_std:
-                channel = (channel - target_mean) * (ref_std / target_std)
-            else:
-                channel = channel - target_mean
-            
-            if match_mean:
-                channel = channel + ref_mean
-            else:
-                channel = channel + target_mean
-            
-            result[:, :, c] = channel
-        
-        # Convert back
-        if color_space == "lab":
-            result = np.clip(result, 0, 255).astype(np.uint8)
-            result = cv2.cvtColor(result, cv2.COLOR_LAB2RGB)
-        elif color_space == "hsv":
-            result[:, :, 0] = np.clip(result[:, :, 0], 0, 179)
-            result[:, :, 1:] = np.clip(result[:, :, 1:], 0, 255)
-            result = result.astype(np.uint8)
-            result = cv2.cvtColor(result, cv2.COLOR_HSV2RGB)
-        else:
-            result = np.clip(result, 0, 255).astype(np.uint8)
-        
-        result = result.astype(np.float32) / 255.0
-        
-        # Blend with original
-        result = original * (1 - strength) + result * strength
-        result = np.clip(result, 0, 1)
-        
-        result_tensor = torch.from_numpy(result).unsqueeze(0)
+        result_rgb = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+        result_tensor = torch.from_numpy(result_rgb).float() / 255.0
+        result_tensor = result_tensor.unsqueeze(0)
         return (result_tensor,)
+
+    def apply_blend_mode(self, bottom, top, mode):
+        bottom_f = bottom.astype(np.float32) / 255.0
+        top_f = top.astype(np.float32) / 255.0
+        
+        if mode == "multiply":
+            result = bottom_f * top_f
+        elif mode == "screen":
+            result = 1 - (1 - bottom_f) * (1 - top_f)
+        elif mode == "overlay":
+            result = np.where(bottom_f < 0.5, 
+                            2 * bottom_f * top_f, 
+                            1 - 2 * (1 - bottom_f) * (1 - top_f))
+        elif mode == "soft_light":
+            result = (1 - 2 * top_f) * (bottom_f ** 2) + 2 * top_f * bottom_f
+        elif mode == "hard_light":
+            result = np.where(top_f < 0.5,
+                            2 * bottom_f * top_f,
+                            1 - 2 * (1 - bottom_f) * (1 - top_f))
+        elif mode == "color":
+            result = self.blend_color(bottom_f, top_f)
+        elif mode == "luminosity":
+            result = self.blend_luminosity(bottom_f, top_f)
+        elif mode == "darken":
+            result = np.minimum(bottom_f, top_f)
+        elif mode == "lighten":
+            result = np.maximum(bottom_f, top_f)
+        else:
+            result = top_f
+        
+        return (np.clip(result, 0, 1) * 255).astype(np.uint8)
+
+    def blend_color(self, bottom, top):
+        # Keep luminosity of bottom, hue/sat of top
+        bottom_uint8 = (bottom * 255).astype(np.uint8)
+        top_uint8 = (top * 255).astype(np.uint8)
+        hsv_bottom = cv2.cvtColor(bottom_uint8, cv2.COLOR_BGR2HSV)
+        hsv_top = cv2.cvtColor(top_uint8, cv2.COLOR_BGR2HSV)
+        hsv_result = hsv_top.copy()
+        hsv_result[:, :, 2] = hsv_bottom[:, :, 2]
+        result = cv2.cvtColor(hsv_result, cv2.COLOR_HSV2BGR)
+        return result.astype(np.float32) / 255.0
+
+    def blend_luminosity(self, bottom, top):
+        # Keep hue/sat of bottom, luminosity of top
+        bottom_uint8 = (bottom * 255).astype(np.uint8)
+        top_uint8 = (top * 255).astype(np.uint8)
+        hsv_bottom = cv2.cvtColor(bottom_uint8, cv2.COLOR_BGR2HSV)
+        hsv_top = cv2.cvtColor(top_uint8, cv2.COLOR_BGR2HSV)
+        hsv_result = hsv_bottom.copy()
+        hsv_result[:, :, 2] = hsv_top[:, :, 2]
+        result = cv2.cvtColor(hsv_result, cv2.COLOR_HSV2BGR)
+        return result.astype(np.float32) / 255.0
+
+    def statistical_lab_match(self, target_bgr, reference_bgr, lum_strength, color_strength):
+        """
+        Statistical color matching in LAB space.
+        Transfers mean and std of color channels without creating artifacts.
+        """
+        target_lab = cv2.cvtColor(target_bgr, cv2.COLOR_BGR2LAB).astype(np.float32)
+        ref_lab = cv2.cvtColor(reference_bgr, cv2.COLOR_BGR2LAB).astype(np.float32)
+        
+        result_lab = target_lab.copy()
+        
+        for i in range(3):
+            strength = lum_strength if i == 0 else color_strength
+            if strength <= 0:
+                continue
+                
+            t_mean = target_lab[:,:,i].mean()
+            t_std = max(target_lab[:,:,i].std(), 1.0)
+            r_mean = ref_lab[:,:,i].mean()
+            r_std = max(ref_lab[:,:,i].std(), 1.0)
+            
+            # Normalize, scale, and shift
+            normalized = (target_lab[:,:,i] - t_mean) / t_std
+            
+            # Blend the statistics based on strength
+            new_std = t_std + strength * (r_std - t_std)
+            new_mean = t_mean + strength * (r_mean - t_mean)
+            
+            # Limit std ratio to prevent extreme changes
+            new_std = np.clip(new_std, t_std * 0.5, t_std * 2.0)
+            
+            result_lab[:,:,i] = normalized * new_std + new_mean
+        
+        result_lab[:,:,0] = np.clip(result_lab[:,:,0], 0, 255)
+        result_lab[:,:,1] = np.clip(result_lab[:,:,1], 0, 255)
+        result_lab[:,:,2] = np.clip(result_lab[:,:,2], 0, 255)
+        
+        return cv2.cvtColor(result_lab.astype(np.uint8), cv2.COLOR_LAB2BGR)
+
+    def gaussian_smooth_1d(self, data, sigma=1.0):
+        """Simple 1D gaussian smoothing without scipy."""
+        kernel_size = int(sigma * 6) | 1  # Ensure odd
+        kernel_size = max(3, kernel_size)
+        x = np.arange(kernel_size) - kernel_size // 2
+        kernel = np.exp(-0.5 * (x / sigma) ** 2)
+        kernel = kernel / kernel.sum()
+        
+        # Pad and convolve
+        padded = np.pad(data, kernel_size // 2, mode='edge')
+        smoothed = np.convolve(padded, kernel, mode='valid')
+        return smoothed
+
+    def histogram_lab_match(self, target_bgr, reference_bgr, lum_strength, color_strength):
+        """
+        Histogram matching with smoothing to prevent banding/patchiness.
+        Uses interpolated LUT and applies gaussian smoothing to avoid discrete jumps.
+        """
+        target_lab = cv2.cvtColor(target_bgr, cv2.COLOR_BGR2LAB).astype(np.float32)
+        ref_lab = cv2.cvtColor(reference_bgr, cv2.COLOR_BGR2LAB).astype(np.float32)
+        
+        result_lab = target_lab.copy()
+        
+        for i in range(3):
+            strength = lum_strength if i == 0 else color_strength
+            if strength <= 0:
+                continue
+            
+            target_channel = target_lab[:,:,i]
+            ref_channel = ref_lab[:,:,i]
+            
+            # Compute histograms
+            t_hist, _ = np.histogram(target_channel.flatten(), bins=256, range=(0, 256))
+            r_hist, _ = np.histogram(ref_channel.flatten(), bins=256, range=(0, 256))
+            
+            # Add small epsilon to avoid zero bins causing issues
+            t_hist = t_hist.astype(np.float64) + 1e-10
+            r_hist = r_hist.astype(np.float64) + 1e-10
+            
+            # Compute CDFs
+            t_cdf = np.cumsum(t_hist)
+            r_cdf = np.cumsum(r_hist)
+            
+            # Normalize CDFs
+            t_cdf = t_cdf / t_cdf[-1]
+            r_cdf = r_cdf / r_cdf[-1]
+            
+            # Create lookup table with interpolation for smoothness
+            lut = np.zeros(256, dtype=np.float32)
+            for j in range(256):
+                # Find where target CDF value falls in reference CDF
+                idx = np.searchsorted(r_cdf, t_cdf[j])
+                idx = min(idx, 255)
+                
+                # Linear interpolation for smoother mapping
+                if idx > 0 and idx < 255:
+                    t_val = t_cdf[j]
+                    r_low = r_cdf[idx - 1]
+                    r_high = r_cdf[idx]
+                    if r_high - r_low > 1e-10:
+                        frac = (t_val - r_low) / (r_high - r_low)
+                        lut[j] = (idx - 1) + frac
+                    else:
+                        lut[j] = idx
+                else:
+                    lut[j] = idx
+            
+            # Smooth the LUT to reduce banding
+            lut = self.gaussian_smooth_1d(lut, sigma=1.5)
+            lut = np.clip(lut, 0, 255)
+            
+            # Apply the smooth lookup using interpolation
+            matched = np.interp(target_channel.flatten(), 
+                               np.arange(256), lut).reshape(target_channel.shape)
+            
+            # Blend with original
+            result_lab[:,:,i] = target_channel * (1 - strength) + matched * strength
+        
+        result_lab[:,:,0] = np.clip(result_lab[:,:,0], 0, 255)
+        result_lab[:,:,1] = np.clip(result_lab[:,:,1], 0, 255)
+        result_lab[:,:,2] = np.clip(result_lab[:,:,2], 0, 255)
+        
+        return cv2.cvtColor(result_lab.astype(np.uint8), cv2.COLOR_LAB2BGR)
+
+    def reinhard_color_transfer(self, target_bgr, reference_bgr, lum_strength, color_strength):
+        """
+        Classic Reinhard color transfer with per-channel strength control.
+        """
+        target_lab = cv2.cvtColor(target_bgr, cv2.COLOR_BGR2LAB).astype(np.float32)
+        ref_lab = cv2.cvtColor(reference_bgr, cv2.COLOR_BGR2LAB).astype(np.float32)
+        
+        result_lab = target_lab.copy()
+        
+        for i in range(3):
+            strength = lum_strength if i == 0 else color_strength
+            if strength <= 0:
+                continue
+                
+            t_mean = target_lab[:,:,i].mean()
+            t_std = max(target_lab[:,:,i].std(), 1.0)
+            r_mean = ref_lab[:,:,i].mean()
+            r_std = max(ref_lab[:,:,i].std(), 1.0)
+            
+            # Classic Reinhard: normalize by target stats, scale by reference stats
+            std_ratio = np.clip(r_std / t_std, 0.3, 3.0)
+            
+            transferred = (target_lab[:,:,i] - t_mean) * std_ratio + r_mean
+            
+            # Blend based on strength
+            result_lab[:,:,i] = target_lab[:,:,i] * (1 - strength) + transferred * strength
+        
+        result_lab[:,:,0] = np.clip(result_lab[:,:,0], 0, 255)
+        result_lab[:,:,1] = np.clip(result_lab[:,:,1], 0, 255)
+        result_lab[:,:,2] = np.clip(result_lab[:,:,2], 0, 255)
+        
+        return cv2.cvtColor(result_lab.astype(np.uint8), cv2.COLOR_LAB2BGR)
+
+    def apply_saturation(self, bgr, saturation):
+        if saturation == 0:
+            return bgr
+        hsv = cv2.cvtColor(bgr, cv2.COLOR_BGR2HSV).astype(np.float32)
+        factor = 1 + saturation / 100.0
+        hsv[:, :, 1] = np.clip(hsv[:, :, 1] * factor, 0, 255)
+        return cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2BGR)
 
 
 class ColorAdjustBlend:
     """
-    HSL adjustments with shadow/midtone/highlight zone controls.
+    RGB color balance with shadow/midtone/highlight controls.
+    Optional color reference: matches color from reference, applies via blend mode, then RGB adjustments.
+    Works standalone as simple color adjust if no reference provided.
     """
+    
+    BLEND_MODES = ["normal", "overlay", "multiply", "screen", "soft_light", 
+                   "hard_light", "color", "luminosity", "darken", "lighten"]
+    
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -105,69 +319,175 @@ class ColorAdjustBlend:
                 "image": ("IMAGE",),
             },
             "optional": {
-                # Global adjustments
-                "hue": ("FLOAT", {"default": 0.0, "min": -180.0, "max": 180.0, "step": 1.0, "display": "slider"}),
-                "saturation": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 1.0, "display": "slider"}),
-                "lightness": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 1.0, "display": "slider"}),
-                # Zone controls
-                "shadows_hue": ("FLOAT", {"default": 0.0, "min": -180.0, "max": 180.0, "step": 1.0, "display": "slider"}),
-                "shadows_sat": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 1.0, "display": "slider"}),
-                "midtones_hue": ("FLOAT", {"default": 0.0, "min": -180.0, "max": 180.0, "step": 1.0, "display": "slider"}),
-                "midtones_sat": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 1.0, "display": "slider"}),
-                "highlights_hue": ("FLOAT", {"default": 0.0, "min": -180.0, "max": 180.0, "step": 1.0, "display": "slider"}),
-                "highlights_sat": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 1.0, "display": "slider"}),
-                # Blend
-                "strength": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.05, "display": "slider"}),
+                # Color reference (optional)
+                "color_reference": ("IMAGE",),
+                "reference_strength": ("FLOAT", {"default": 0.75, "min": 0.0, "max": 1.0, "step": 0.05, "display": "slider"}),
+                "blend_mode": (cls.BLEND_MODES, {"default": "color"}),
+                # RGB adjustments (post-process)
+                "r_shadows": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 5.0, "display": "slider"}),
+                "g_shadows": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 5.0, "display": "slider"}),
+                "b_shadows": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 5.0, "display": "slider"}),
+                "r_midtones": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 5.0, "display": "slider"}),
+                "g_midtones": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 5.0, "display": "slider"}),
+                "b_midtones": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 5.0, "display": "slider"}),
+                "r_highlights": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 5.0, "display": "slider"}),
+                "g_highlights": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 5.0, "display": "slider"}),
+                "b_highlights": ("FLOAT", {"default": 0.0, "min": -100.0, "max": 100.0, "step": 5.0, "display": "slider"}),
             }
         }
 
     RETURN_TYPES = ("IMAGE",)
-    FUNCTION = "adjust_color"
+    FUNCTION = "apply_color_adjust_blend"
     CATEGORY = "MachinePaintingNodes"
 
-    def adjust_color(self, image, hue=0.0, saturation=0.0, lightness=0.0,
-                     shadows_hue=0.0, shadows_sat=0.0,
-                     midtones_hue=0.0, midtones_sat=0.0,
-                     highlights_hue=0.0, highlights_sat=0.0,
-                     strength=1.0):
+    def apply_color_adjust_blend(self, image, 
+                               color_reference=None, reference_strength=0.75, blend_mode="color",
+                               r_shadows=0.0, g_shadows=0.0, b_shadows=0.0,
+                               r_midtones=0.0, g_midtones=0.0, b_midtones=0.0,
+                               r_highlights=0.0, g_highlights=0.0, b_highlights=0.0):
         
-        img = image[0].cpu().numpy()
-        original = img.copy()
-        
-        img_uint8 = (img * 255).astype(np.uint8)
-        hsv = cv2.cvtColor(img_uint8, cv2.COLOR_RGB2HSV).astype(np.float32)
-        
-        # Calculate luminance for zone masks
-        lum = 0.299 * img[:, :, 0] + 0.587 * img[:, :, 1] + 0.114 * img[:, :, 2]
-        
-        # Create smooth zone masks using cosine interpolation
-        shadows_mask = np.clip(1.0 - (lum / 0.33), 0, 1) ** 0.5
-        highlights_mask = np.clip((lum - 0.67) / 0.33, 0, 1) ** 0.5
-        midtones_mask = 1.0 - shadows_mask - highlights_mask
-        midtones_mask = np.clip(midtones_mask, 0, 1)
-        
-        # Apply global adjustments
-        hsv[:, :, 0] = (hsv[:, :, 0] + hue / 2.0) % 180
-        hsv[:, :, 1] = np.clip(hsv[:, :, 1] * (1 + saturation / 100.0), 0, 255)
-        hsv[:, :, 2] = np.clip(hsv[:, :, 2] * (1 + lightness / 100.0), 0, 255)
-        
-        # Apply zone adjustments
-        hsv[:, :, 0] = (hsv[:, :, 0] + shadows_hue / 2.0 * shadows_mask) % 180
-        hsv[:, :, 1] = np.clip(hsv[:, :, 1] * (1 + shadows_sat / 100.0 * shadows_mask), 0, 255)
-        
-        hsv[:, :, 0] = (hsv[:, :, 0] + midtones_hue / 2.0 * midtones_mask) % 180
-        hsv[:, :, 1] = np.clip(hsv[:, :, 1] * (1 + midtones_sat / 100.0 * midtones_mask), 0, 255)
-        
-        hsv[:, :, 0] = (hsv[:, :, 0] + highlights_hue / 2.0 * highlights_mask) % 180
-        hsv[:, :, 1] = np.clip(hsv[:, :, 1] * (1 + highlights_sat / 100.0 * highlights_mask), 0, 255)
-        
-        # Convert back
-        hsv = hsv.astype(np.uint8)
-        result = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB).astype(np.float32) / 255.0
-        
-        # Blend with original
-        result = original * (1 - strength) + result * strength
-        result = np.clip(result, 0, 1)
-        
-        result_tensor = torch.from_numpy(result).unsqueeze(0)
+        img = (image[0].cpu().numpy() * 255).astype(np.uint8)
+        h, w = img.shape[:2]
+        img_bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+        # Step 1: If color reference provided, color match then blend
+        if color_reference is not None and reference_strength > 0:
+            ref = (color_reference[0].cpu().numpy() * 255).astype(np.uint8)
+            ref_bgr = cv2.cvtColor(ref, cv2.COLOR_RGB2BGR)
+            if ref_bgr.shape[:2] != (h, w):
+                ref_bgr = cv2.resize(ref_bgr, (w, h))
+            
+            # Color match the reference to the image (statistical LAB matching)
+            matched = self.statistical_lab_match(img_bgr, ref_bgr)
+            
+            # Apply blend mode to the matched result
+            if blend_mode != "normal":
+                blended = self.apply_blend_mode(img_bgr, matched, blend_mode)
+            else:
+                blended = matched
+            
+            # Blend with original based on strength
+            img_bgr = cv2.addWeighted(img_bgr, 1 - reference_strength, blended, reference_strength, 0)
+
+        # Step 2: Apply RGB color balance adjustments (post-process)
+        img_bgr = self.photoshop_color_balance(img_bgr, 
+                                             r_shadows, g_shadows, b_shadows,
+                                             r_midtones, g_midtones, b_midtones,
+                                             r_highlights, g_highlights, b_highlights)
+
+        result_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+        result_tensor = torch.from_numpy(result_rgb).float() / 255.0
+        result_tensor = result_tensor.unsqueeze(0)
         return (result_tensor,)
+
+    def statistical_lab_match(self, target_bgr, reference_bgr):
+        """Match colors from reference to target using LAB color space."""
+        target_lab = cv2.cvtColor(target_bgr, cv2.COLOR_BGR2LAB).astype(np.float32)
+        ref_lab = cv2.cvtColor(reference_bgr, cv2.COLOR_BGR2LAB).astype(np.float32)
+        
+        result_lab = target_lab.copy()
+        
+        for i in range(3):
+            t_mean = target_lab[:,:,i].mean()
+            t_std = max(target_lab[:,:,i].std(), 1.0)
+            r_mean = ref_lab[:,:,i].mean()
+            r_std = max(ref_lab[:,:,i].std(), 1.0)
+            
+            # Normalize, scale, and shift
+            normalized = (target_lab[:,:,i] - t_mean) / t_std
+            new_std = np.clip(r_std, t_std * 0.5, t_std * 2.0)
+            result_lab[:,:,i] = normalized * new_std + r_mean
+        
+        result_lab = np.clip(result_lab, 0, 255).astype(np.uint8)
+        return cv2.cvtColor(result_lab, cv2.COLOR_LAB2BGR)
+
+    def apply_blend_mode(self, bottom, top, mode):
+        bottom_f = bottom.astype(np.float32) / 255.0
+        top_f = top.astype(np.float32) / 255.0
+        
+        if mode == "normal":
+            result = top_f
+        elif mode == "multiply":
+            result = bottom_f * top_f
+        elif mode == "screen":
+            result = 1 - (1 - bottom_f) * (1 - top_f)
+        elif mode == "overlay":
+            result = np.where(bottom_f < 0.5, 
+                            2 * bottom_f * top_f, 
+                            1 - 2 * (1 - bottom_f) * (1 - top_f))
+        elif mode == "soft_light":
+            result = (1 - 2 * top_f) * (bottom_f ** 2) + 2 * top_f * bottom_f
+        elif mode == "hard_light":
+            result = np.where(top_f < 0.5,
+                            2 * bottom_f * top_f,
+                            1 - 2 * (1 - bottom_f) * (1 - top_f))
+        elif mode == "color":
+            result = self.blend_color(bottom_f, top_f)
+        elif mode == "luminosity":
+            result = self.blend_luminosity(bottom_f, top_f)
+        elif mode == "darken":
+            result = np.minimum(bottom_f, top_f)
+        elif mode == "lighten":
+            result = np.maximum(bottom_f, top_f)
+        else:
+            result = top_f
+        
+        return (np.clip(result, 0, 1) * 255).astype(np.uint8)
+
+    def blend_color(self, bottom, top):
+        bottom_uint8 = (bottom * 255).astype(np.uint8)
+        top_uint8 = (top * 255).astype(np.uint8)
+        hsv_bottom = cv2.cvtColor(bottom_uint8, cv2.COLOR_BGR2HSV)
+        hsv_top = cv2.cvtColor(top_uint8, cv2.COLOR_BGR2HSV)
+        hsv_result = hsv_top.copy()
+        hsv_result[:, :, 2] = hsv_bottom[:, :, 2]
+        result = cv2.cvtColor(hsv_result, cv2.COLOR_HSV2BGR)
+        return result.astype(np.float32) / 255.0
+
+    def blend_luminosity(self, bottom, top):
+        bottom_uint8 = (bottom * 255).astype(np.uint8)
+        top_uint8 = (top * 255).astype(np.uint8)
+        hsv_bottom = cv2.cvtColor(bottom_uint8, cv2.COLOR_BGR2HSV)
+        hsv_top = cv2.cvtColor(top_uint8, cv2.COLOR_BGR2HSV)
+        hsv_result = hsv_bottom.copy()
+        hsv_result[:, :, 2] = hsv_top[:, :, 2]
+        result = cv2.cvtColor(hsv_result, cv2.COLOR_HSV2BGR)
+        return result.astype(np.float32) / 255.0
+
+    def photoshop_color_balance(self, bgr, r_shadows, g_shadows, b_shadows,
+                              r_midtones, g_midtones, b_midtones,
+                              r_highlights, g_highlights, b_highlights):
+        b, g, r = cv2.split(bgr)
+        b_f = b.astype(np.float32) / 255.0
+        g_f = g.astype(np.float32) / 255.0
+        r_f = r.astype(np.float32) / 255.0
+        
+        luminance = 0.299 * r_f + 0.587 * g_f + 0.114 * b_f
+        
+        shadows_weight = np.clip((0.3 - luminance) / 0.3, 0, 1) ** 2
+        midtones_weight = np.clip(1 - np.abs(luminance - 0.5) * 2, 0, 1)
+        highlights_weight = np.clip((luminance - 0.6) / 0.4, 0, 1) ** 0.5
+        
+        def apply_adjustment(channel, shadows_adj, midtones_adj, highlights_adj):
+            shadows_mult = 1.0 + (shadows_adj / 100.0)
+            midtones_mult = 1.0 + (midtones_adj / 100.0)
+            highlights_mult = 1.0 + (highlights_adj / 100.0)
+            
+            adjusted = channel * (
+                shadows_weight * shadows_mult + 
+                midtones_weight * midtones_mult + 
+                highlights_weight * highlights_mult +
+                (1.0 - shadows_weight - midtones_weight - highlights_weight)
+            )
+            return np.clip(adjusted, 0, 1)
+        
+        r_f = apply_adjustment(r_f, r_shadows, r_midtones, r_highlights)
+        g_f = apply_adjustment(g_f, g_shadows, g_midtones, g_highlights)
+        b_f = apply_adjustment(b_f, b_shadows, b_midtones, b_highlights)
+        
+        result_bgr = cv2.merge([
+            (b_f * 255).astype(np.uint8),
+            (g_f * 255).astype(np.uint8),
+            (r_f * 255).astype(np.uint8)
+        ])
+        return result_bgr

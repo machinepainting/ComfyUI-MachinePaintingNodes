@@ -6,7 +6,7 @@ class SelectiveColorPro:
     """
     Photoshop-style selective color adjustment.
     Adjust cyan, magenta, yellow, black for specific color ranges.
-    Connect to Live Adjust Preview node to see changes in real-time.
+    Uses smooth falloff for natural-looking color adjustments.
     """
     
     COLOR_RANGES = ["reds", "yellows", "greens", "cyans", "blues", "magentas", "whites", "neutrals", "blacks"]
@@ -32,56 +32,131 @@ class SelectiveColorPro:
     FUNCTION = "apply_selective_color"
     CATEGORY = "MachinePaintingNodes"
 
-    def get_color_mask(self, img_hsv, target_color):
-        """Create a mask for the target color range."""
-        h, s, v = img_hsv[:,:,0], img_hsv[:,:,1], img_hsv[:,:,2]
+    def get_color_mask(self, img_rgb, target_color):
+        """
+        Create a smooth mask for the target color range.
+        Uses RGB-based color detection with smooth falloff like Photoshop.
+        """
+        r, g, b = img_rgb[:,:,0], img_rgb[:,:,1], img_rgb[:,:,2]
+        
+        # Calculate color components
+        max_rgb = np.maximum(np.maximum(r, g), b)
+        min_rgb = np.minimum(np.minimum(r, g), b)
+        chroma = max_rgb - min_rgb + 1e-10
+        
+        # Saturation (0-1)
+        saturation = np.where(max_rgb > 0, chroma / (max_rgb + 1e-10), 0)
+        
+        # Lightness (0-1)
+        lightness = (max_rgb + min_rgb) / 2
         
         if target_color == "reds":
-            mask = ((h <= 15) | (h >= 165)) & (s > 25)
+            # Red dominance with smooth falloff
+            red_strength = (r - np.maximum(g, b)) / (chroma + 1e-10)
+            red_strength = np.clip(red_strength, 0, 1)
+            # Also catch magentas and oranges that lean red
+            mask = red_strength * saturation
+            
         elif target_color == "yellows":
-            mask = (h >= 15) & (h <= 45) & (s > 25)
+            # Yellow = high red AND green, low blue
+            yellow_strength = (np.minimum(r, g) - b) / (chroma + 1e-10)
+            yellow_strength = np.clip(yellow_strength, 0, 1)
+            mask = yellow_strength * saturation
+            
         elif target_color == "greens":
-            mask = (h >= 45) & (h <= 75) & (s > 25)
+            # Green dominance
+            green_strength = (g - np.maximum(r, b)) / (chroma + 1e-10)
+            green_strength = np.clip(green_strength, 0, 1)
+            mask = green_strength * saturation
+            
         elif target_color == "cyans":
-            mask = (h >= 75) & (h <= 105) & (s > 25)
+            # Cyan = high green AND blue, low red
+            cyan_strength = (np.minimum(g, b) - r) / (chroma + 1e-10)
+            cyan_strength = np.clip(cyan_strength, 0, 1)
+            mask = cyan_strength * saturation
+            
         elif target_color == "blues":
-            mask = (h >= 105) & (h <= 135) & (s > 25)
+            # Blue dominance
+            blue_strength = (b - np.maximum(r, g)) / (chroma + 1e-10)
+            blue_strength = np.clip(blue_strength, 0, 1)
+            mask = blue_strength * saturation
+            
         elif target_color == "magentas":
-            mask = (h >= 135) & (h <= 165) & (s > 25)
+            # Magenta = high red AND blue, low green
+            magenta_strength = (np.minimum(r, b) - g) / (chroma + 1e-10)
+            magenta_strength = np.clip(magenta_strength, 0, 1)
+            mask = magenta_strength * saturation
+            
         elif target_color == "whites":
-            mask = (v >= 200) & (s <= 30)
+            # High lightness, low saturation
+            white_strength = np.clip((lightness - 0.7) / 0.3, 0, 1)
+            sat_falloff = np.clip(1 - saturation * 3, 0, 1)
+            mask = white_strength * sat_falloff
+            
         elif target_color == "blacks":
-            mask = (v <= 55)
+            # Low lightness with smooth falloff
+            black_strength = np.clip((0.3 - lightness) / 0.3, 0, 1)
+            mask = black_strength
+            
         else:  # neutrals
-            mask = (s <= 25) & (v > 55) & (v < 200)
+            # Low saturation, mid lightness
+            neutral_sat = np.clip(1 - saturation * 4, 0, 1)
+            neutral_light = 1 - np.abs(lightness - 0.5) * 2
+            neutral_light = np.clip(neutral_light, 0, 1)
+            mask = neutral_sat * neutral_light
         
-        mask_float = mask.astype(np.float32)
-        mask_float = cv2.GaussianBlur(mask_float, (5, 5), 0)
+        # Smooth the mask slightly to avoid any harsh edges
+        mask = cv2.GaussianBlur(mask.astype(np.float32), (3, 3), 0)
         
-        return mask_float
+        return mask
 
     def apply_cmyk_adjustment(self, img, color_mask, cyan, magenta, yellow, black):
-        """Apply CMYK adjustments to masked areas."""
+        """
+        Apply CMYK adjustments to masked areas.
+        Photoshop-style: adjustments are relative to the current color values.
+        """
         result = img.copy()
         
+        # Convert adjustments to factors (-1 to 1)
         c_adj = cyan / 100.0
         m_adj = magenta / 100.0
         y_adj = yellow / 100.0
         k_adj = black / 100.0
         
-        mask_3ch = np.stack([color_mask, color_mask, color_mask], axis=2)
+        # Expand mask to 3 channels
+        mask = color_mask[:, :, np.newaxis]
         
-        # Cyan affects Red (inverse)
-        result[:,:,0] = result[:,:,0] - (c_adj * mask_3ch[:,:,0] * result[:,:,0])
-        # Magenta affects Green (inverse)
-        result[:,:,1] = result[:,:,1] - (m_adj * mask_3ch[:,:,1] * result[:,:,1])
-        # Yellow affects Blue (inverse)
-        result[:,:,2] = result[:,:,2] - (y_adj * mask_3ch[:,:,2] * result[:,:,2])
+        # CMYK to RGB relationship:
+        # Cyan reduces Red
+        # Magenta reduces Green  
+        # Yellow reduces Blue
+        # Black reduces all (lightness)
         
-        # Black affects all channels
+        # Apply adjustments proportionally to mask and current pixel values
+        # Positive cyan = reduce red, Negative cyan = add red
+        if c_adj != 0:
+            adjustment = c_adj * mask * result[:,:,0:1]
+            result[:,:,0:1] = result[:,:,0:1] - adjustment
+            
+        if m_adj != 0:
+            adjustment = m_adj * mask * result[:,:,1:2]
+            result[:,:,1:2] = result[:,:,1:2] - adjustment
+            
+        if y_adj != 0:
+            adjustment = y_adj * mask * result[:,:,2:3]
+            result[:,:,2:3] = result[:,:,2:3] - adjustment
+        
+        # Black adjustment affects luminosity
         if k_adj != 0:
-            darkness = k_adj * mask_3ch
-            result = result * (1 - darkness * 0.5)
+            # Positive black = darken, negative = lighten
+            if k_adj > 0:
+                # Darken: multiply by (1 - k_adj * mask)
+                darkness = k_adj * mask
+                result = result * (1 - darkness)
+            else:
+                # Lighten: move toward white
+                lightness = -k_adj * mask
+                result = result + (1 - result) * lightness
         
         return np.clip(result, 0, 1)
 
@@ -91,10 +166,10 @@ class SelectiveColorPro:
         img = image[0].cpu().numpy().astype(np.float32)
         original = img.copy()
         
-        img_uint8 = (img * 255).astype(np.uint8)
-        img_hsv = cv2.cvtColor(img_uint8, cv2.COLOR_RGB2HSV)
+        # Get smooth color mask
+        color_mask = self.get_color_mask(img, target_color)
         
-        color_mask = self.get_color_mask(img_hsv, target_color)
+        # Apply CMYK adjustments
         result = self.apply_cmyk_adjustment(img, color_mask, cyan, magenta, yellow, black)
         
         # Apply external mask if provided
@@ -110,7 +185,7 @@ class SelectiveColorPro:
             if invert_mask:
                 mask_np = 1.0 - mask_np
             
-            mask_3ch = np.stack([mask_np, mask_np, mask_np], axis=2)
+            mask_3ch = mask_np[:, :, np.newaxis]
             result = original * (1 - mask_3ch) + result * mask_3ch
         
         result = np.clip(result, 0, 1)
