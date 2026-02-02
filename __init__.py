@@ -1,45 +1,87 @@
 # __init__.py
 
 """
-ComfyUI-MachinePaintingNodes v1.0.1
-Professional tools + Boolean Master & Value Switches
+ComfyUI-MachinePaintingNodes v2.0.0
+Professional color grading, mask tools, and utilities for ComfyUI
 """
 
-from .color_match_blend import ColorMatchBlend
-from .color_adjust_blend import ColorAdjustBlend
+# Combined files
+from .boolean_utils import (
+    Boolean, BooleanInvert, BooleanSwitchValueOutput, 
+    BooleanInputValueSwitch, BooleanMasterSwitch
+)
+from .analysis_view import HistogramView, ColorWheelView
+from .tonal_adjust import LevelsAdjust, AutoLevels, BrightnessContrastAdjust
+from .color_blend import ColorMatchBlend, ColorAdjustBlend
+from .remove_background import RemoveBackgroundPro, MaskEditor, ApplyMask
+
+# Standalone files
 from .image_blend_pro import ImageBlendPro
-from .brightness_contrast_adjust import BrightnessContrastAdjust
-from .boolean_switch_value_output import BooleanSwitchValueOutput      
-from .boolean_input_value_switch import BooleanInputValueSwitch         
-from .boolean_master_switch import BooleanMasterSwitch
-from .boolean import Boolean
-from .seed_boolean_lock import SeedBooleanLock
+from .curves_adjust_pro import CurvesAdjustPro
+from .channel_mask_pro import ChannelMaskPro
+from .selective_color_pro import SelectiveColorPro
+from .lut_apply import LUTApply
+from .seed_lock import SeedLock
 
 NODE_CLASS_MAPPINGS = {
+    # Color Adjustment
+    "CurvesAdjustPro": CurvesAdjustPro,
+    "LevelsAdjust": LevelsAdjust,
+    "AutoLevels": AutoLevels,
+    "BrightnessContrastAdjust": BrightnessContrastAdjust,
+    "SelectiveColorPro": SelectiveColorPro,
     "ColorMatchBlend": ColorMatchBlend,
     "ColorAdjustBlend": ColorAdjustBlend,
+    "LUTApply": LUTApply,
+    # Blending
     "ImageBlendPro": ImageBlendPro,
-    "BrightnessContrastAdjust": BrightnessContrastAdjust,
-    "BooleanSwitchValueOutput": BooleanSwitchValueOutput,         
-    "BooleanInputValueSwitch": BooleanInputValueSwitch,           
-    "BooleanMasterSwitch": BooleanMasterSwitch,
+    # Mask & Background
+    "RemoveBackgroundPro": RemoveBackgroundPro,
+    "MaskEditor": MaskEditor,
+    "ApplyMask": ApplyMask,
+    "ChannelMaskPro": ChannelMaskPro,
+    # Analysis
+    "HistogramView": HistogramView,
+    "ColorWheelView": ColorWheelView,
+    # Utilities
     "Boolean": Boolean,
-    "SeedBooleanLock": SeedBooleanLock,
+    "BooleanInvert": BooleanInvert,
+    "BooleanSwitchValueOutput": BooleanSwitchValueOutput,
+    "BooleanInputValueSwitch": BooleanInputValueSwitch,
+    "BooleanMasterSwitch": BooleanMasterSwitch,
+    "SeedLock": SeedLock,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    # Color Adjustment
+    "CurvesAdjustPro": "👾 Curves Adjust Pro",
+    "LevelsAdjust": "👾 Levels Adjust",
+    "AutoLevels": "👾 Auto Levels",
+    "BrightnessContrastAdjust": "👾 Brightness Contrast Adjust",
+    "SelectiveColorPro": "👾 Selective Color Pro",
     "ColorMatchBlend": "👾 Color Match Blend",
     "ColorAdjustBlend": "👾 Color Adjust Blend",
+    "LUTApply": "👾 LUT Apply",
+    # Blending
     "ImageBlendPro": "👾 Image Blend Pro",
-    "BrightnessContrastAdjust": "👾 Brightness Contrast Adjust",
+    # Mask & Background
+    "RemoveBackgroundPro": "👾 Remove Background Pro",
+    "MaskEditor": "👾 Mask Editor",
+    "ApplyMask": "👾 Apply Mask",
+    "ChannelMaskPro": "👾 Channel Mask Pro",
+    # Analysis
+    "HistogramView": "👾 Histogram View",
+    "ColorWheelView": "👾 Color Wheel View",
+    # Utilities
+    "Boolean": "👾 Boolean",
+    "BooleanInvert": "👾 Boolean Invert",
     "BooleanSwitchValueOutput": "👾 Boolean Switch Value Output",
     "BooleanInputValueSwitch": "👾 Boolean Input Value Switch",
     "BooleanMasterSwitch": "👾 Boolean Master Switch",
-    "Boolean": "👾 Boolean",
-    "SeedBooleanLock": "👾 Seed Boolean Lock",
+    "SeedLock": "👾 Seed Lock",
 }
 
 WEB_DIRECTORY = "./js"
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
 
-print("ComfyUI-MachinePaintingNodes: LOADED SUCCESSFULLY")
+print("ComfyUI-MachinePaintingNodes v2.0.0: Loaded 21 nodes")
