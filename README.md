@@ -139,7 +139,7 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 ---
 
-## Want to Auto Send your ComfyUI output files from your cloud to your Google Drive or Dropbox Account? 
+## Want to Auto Send your ComfyUI files from output folder to your Google Drive or Dropbox Account? 
 
 Check out these new Nodes to advance your Ai workflows. Super helpful tools to protect your creations and streamline your process. DriveSend and DropSend node with optional file Encryption.
 
