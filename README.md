@@ -1,109 +1,150 @@
-# MachinePaintingNodes for ComfyUI - By MachinePainting
+# ComfyUI-MachinePaintingNodes
 
-**Professional color, blending, and utility tools for AI artists.**
+![MachinePaintingNodes](images/MachinePaintingNodes.png)
 
-A growing collection of high-quality custom nodes focused on precise color correction, advanced image blending, boolean/conditional logic, and workflow utilities.
+**Professional color grading, mask tools, and utilities for ComfyUI**
 
-![MachinePainting Nodes Overview](images/MachinePaintingNodes.png)
-
-## Features & Nodes
-
-### Color & Blending Tools
-- **ColorAdjustBlend**  
-  Per-channel tonal adjustments (shadows, midtones, highlights) + blend modes with optional color overlay.
-
-- **ColorMatchBlend**  
-  Match hue, saturation, and overall color from a reference image to your target.
-
-- **ImageBlendPro**  
-  Advanced layer blending with 15+ Photoshop-style modes (normal, multiply, screen, overlay, soft_light, color, luminosity, etc.).
-
-### Utility & Control Nodes
-- **Boolean Master Switch**  
-  Central boolean toggle to enable/disable entire branches or groups of nodes.
-
-- **Boolean Input Value Switch**  
-  Switch between two input values (e.g., numbers, strings, images) based on a boolean condition.
-
-- **Boolean Switch Value Output**  
-  Output different values depending on boolean state (great for dynamic parameters).
-
-- **Seed Boolean Lock**  
-  Locks the current generation's seed (opposed to locking for the next run) when boolean is true.
-
-- **Brightness Contrast Adjust**
-  Simple, precise control over brightness and contrast — useful as a quick post-process or in masked areas.
-
-(Additional boolean utilities may be added soon — stay tuned!)
-
-## Node Details
-
-### ColorAdjustBlend
-Fine-tune **shadows, midtones, highlights** per RGB channel.
-
-| Parameter              | Range          | Effect                          |
-|------------------------|----------------|---------------------------------|
-| r/g/b_shadows          | -100 to +100   | Lift dark areas                 |
-| r/g/b_midtones         | -100 to +100   | Balance middle tones            |
-| r/g/b_highlights       | -100 to +100   | Control bright areas            |
-
-**Optional Overlay:**  
-- enable_color_overlay  
-- color_input (image)  
-- color_blend_mode (overlay, multiply, screen, etc.)  
-- color_input_opacity (0.0–1.0)
-
-### ColorMatchBlend
-Match **hue & saturation** from a reference.
-
-| Parameter       | Range       | Effect                     |
-|-----------------|-------------|----------------------------|
-| target_image    | —           | Image to adjust            |
-| reference_image | —           | Color source               |
-| strength        | 0.0–1.0     | Blend intensity            |
-| saturation      | -100 to +100| Boost/reduce vibrance      |
-
-### ImageBlendPro
-Blend two images with **Photoshop-grade modes**.
-
-| Blend Mode     | Effect                  |
-|----------------|-------------------------|
-| normal         | Standard overlay        |
-| multiply       | Darken                  |
-| screen         | Lighten                 |
-| overlay        | Contrast boost          |
-| soft_light     | Gentle contrast         |
-| color          | Hue + saturation only   |
-| luminosity     | Brightness only         |
-
-`blend_amount`: 0.0 (image1) → 1.0 (image2)
-
-### Boolean & Utility Nodes
-These help create cleaner, more conditional workflows without spaghetti.
-
-- **Boolean Master Switch**: One boolean to rule them all — bypass or activate whole sections.
-- **Boolean Input Value Switch**: Choose value A or B based on condition.
-- **Boolean Switch Value Output**: Similar but for outputs.
-- **Seed Boolean Lock**: Freeze seed on true — prevents random changes mid-workflow.
-- **Brightness Contrast Adjust**: Classic brightness/contrast sliders.
+A comprehensive node suite for professional level image processing, color correction, and advanced workflow enhancement utilities. 
 
 ## Installation
 
-1. In ComfyUI Manager: Search for "MachinePaintingNodes" (or add custom repo if not listed yet).
-2. Or manual:
+### ComfyUI Manager (Recommended)
+Search for "MachinePaintingNodes" in ComfyUI Manager and install.
 
-`cd ComfyUI/custom_nodes`
-`git clone https://github.com/machinepainting/ComfyUI-MachinePaintingNodes.git`
+### Manual Installation
+```bash
+cd ComfyUI/custom_nodes
+git clone https://github.com/machinepainting/ComfyUI-MachinePaintingNodes.git
+```
 
-3. Restart ComfyUI (or click "Restart" in Manager).
-4. Nodes appear under **MachinePainting** or **utils** categories.
+### Dependencies
+```bash
+pip install -r requirements.txt```
 
-No extra models required — pure Python nodes.
+---
 
-## Usage Tips
-- Chain **ColorMatchBlend** → **ColorAdjustBlend** → **ImageBlendPro** for pro-level color grading.
-- Use boolean switches to A/B test styles without duplicating workflows.
-- Lock seeds during refinement to keep variations controlled.
+## Nodes (21 Total)
 
-👾 Made by MachinePainting for the ComfyUI community.  
-Feedback/PRs welcome — drop an issue or star if ya dig!
+### 🎨 Color Adjustment
+
+| Node | Description |
+|------|-------------|
+| **👾 Curves Adjust Pro** | Interactive Photoshop-style curves with RGB/R/G/B channels, 17 presets, mask support, channel-mask support |
+| **👾 Levels Adjust** | Black point, white point, gamma, output levels |
+| **👾 Auto Levels** | Automatic levels correction |
+| **👾 Selective Color Pro** | CMYK adjustments for specific color ranges and fine tuned color adjustments (reds, yellows, greens, cyans, blues, magentas, whites, neutrals, blacks) |
+| **👾 Brightness Contrast Adjust** | Simple brightness and contrast controls with simple slider controls |
+| **👾 Color Match Blend** | Match colors from one image to another with adjustments |
+| **👾 Color Adjust Blend** | Adjust Color range for Shadows, Mid-Range, and Highlights. Optional Color Match Blend Color |
+| **👾 LUT Apply** | Apply .cube/.3dl LUT files for cinematic color grading (includes 5 bundled LUTs) |
+
+### 🖼️ Blending
+
+| Node | Description |
+|------|-------------|
+| **👾 Image Blend Pro** | Blend images with 15 blend modes (normal, overlay, multiply, screen, soft light, hard light, etc.) |
+
+### 🎭 Mask & Background
+
+| Node | Description |
+|------|-------------|
+| **👾 Remove Background Pro** | Advanced AI-powered background removal with 8 rembg models, mask editing tools, multiple preview modes |
+| **👾 Mask Editor** | Stand alone Mask Tools. Refine masks with grow/shrink/blur/fill |
+| **👾 Apply Mask** | Composite image with mask and background options |
+| **👾 Channel Mask Pro** | Extract R/G/B/A channels as separate masks with levels/contrast adjustments and input mask support for advanced Channel Masking|
+
+### 📊 Analysis
+
+| Node | Description |
+|------|-------------|
+| **👾 Histogram View** | Display RGB/luminance histogram in-node for advanced image setting color display|
+| **👾 Color Wheel View** | Display vectorscope color distribution in-node for advanced image setting color display |
+
+### 🔧 Utilities
+
+| Node | Description |
+|------|-------------|
+| **👾 Boolean** | Output a true/false value |
+| **👾 Boolean Invert** | Flip boolean value (true→false, false→true) for advanced workflow pipline and settings switching |
+| **👾 Boolean Switch Value Output** | Output different values based on boolean for advanced workflow pipline and settings switching |
+| **👾 Boolean Input Value Switch** | Route inputs based on boolean for advanced workflow pipline and settings switching |
+| **👾 Boolean Master Switch** | Control multiple booleans from one switch for controlling multiple switches with one master switch node |
+| **👾 Seed Lock** | Lock/unlock seed values with a toggle to lock the current seed vaule, opposed to the standard where the following run seed value is locked |
+
+---
+
+## Features
+
+### Curves Adjust Pro
+- Interactive curve editor with click-to-add, drag-to-move, shift-click-to-remove points
+- Separate RGB, Red, Green, Blue channels
+- 17 built-in presets (S-Curve Contrast, Fade, Cross Process, Cinematic, etc.)
+- Visual display of all channel curves in RGB mode
+- Mask support with invert option
+- Catmull-Rom spline interpolation for smooth curves
+
+### LUT Apply
+- Supports .cube and .3dl LUT formats
+- 5 bundled LUTs included (auto-installed to `ComfyUI/input/luts/`):
+  - Cinematic_Teal_Orange
+  - Warm_Tone
+  - Cool_Tone
+  - Vintage_Fade
+  - High_Contrast
+- Intensity slider to blend effect
+- Add your own LUTs to `ComfyUI/input/luts/`
+
+### Remove Background Pro
+- 8 AI models: u2net, u2netp, u2net_human_seg, u2net_cloth_seg, silueta, isnet-general-use, isnet-anime, sam
+- Built-in mask refinement (grow/shrink, blur, threshold)
+- Preview modes: masked, mask only, side-by-side, overlay
+- Edge feathering for smooth composites
+
+### Channel Mask Pro
+- Separates image into R, G, B, Alpha channel masks
+- Levels adjustments (black point, white point, gamma)
+- Contrast and brightness controls
+- Input mask support with invert option
+- B&W preview with R/G/B/L labels
+
+### Selective Color Pro
+- Target specific colors: reds, yellows, greens, cyans, blues, magentas, whites, neutrals, blacks
+- CMYK adjustment sliders (-100 to +100)
+- Reset All button
+- Mask support
+
+---
+
+## Changelog
+
+### v2.0.0
+- **New Nodes:** LUT Apply, Channel Mask Pro, Selective Color Pro, Boolean Invert
+- **Bundled LUTs:** 5 color grading LUTs included with auto-install
+- **Curves Adjust Pro:** Added mask support, improved curve display showing all channels in RGB mode
+- **Channel Mask Pro:** Added input mask support, levels/contrast adjustments, improved B&W preview
+- **Unified Category:** All nodes now appear under single "MachinePaintingNodes" folder
+- **Selective Color Pro:** Added Reset All button
+- **Analysis Nodes:** Improved auto-scaling for Histogram and Color Wheel views
+- **Code Cleanup:** Removed deprecated nodes, standardized categories
+
+### v1.0.0
+- Initial release with color adjustment, blending, and boolean utility nodes
+
+---
+
+## License
+
+MIT License - See [LICENSE](LICENSE) for details.
+
+---
+
+## Want to Auto Send your ComfyUI output files from your cloud to your Google Dive or Dropbox Account? 
+
+Check out these new Nodes to advance your Ai workflows. Super helpful tools to protect your creations and streamline your process. 
+DriveSend and DropSend node with optional file Encryption. 
+https://github.com/machinepainting/ComfyUI_DriveSendNode
+https://github.com/machinepainting/ComfyUI_DropSendNode
+
+## Tags
+
+`comfyui` `comfyui-nodes` `custom-nodes` `color-grading` `color-correction` `curves` `levels` `lut` `lookup-table` `photoshop` `image-processing` `image-editing` `background-removal` `rembg` `masking` `mask-editor` `channel-mixer` `histogram` `vectorscope` `blend-modes` `compositing` `stable-diffusion` `ai-art` `generative-art` `film-emulation` `cinematic` `color-matching` `hsl` `cmyk` `selective-color` `boolean-logic` `workflow` `utilities`

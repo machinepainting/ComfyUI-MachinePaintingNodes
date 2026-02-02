@@ -10,7 +10,7 @@ class ImageBlendPro:
             "required": {
                 "image1": ("IMAGE",),
                 "image2": ("IMAGE",),
-                "blend_amount": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.05}),
+                "blend_amount": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.05, "display": "slider"}),
                 "blend_mode": ([
                     "normal", "overlay", "multiply", "screen", "soft_light", 
                     "hard_light", "linear_light", "difference", "color", "luminosity",
@@ -21,7 +21,7 @@ class ImageBlendPro:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "blend_images"
-    CATEGORY = "Image"
+    CATEGORY = "MachinePaintingNodes"
 
     def blend_images(self, image1, image2, blend_amount, blend_mode):
         img1 = (image1[0].cpu().numpy() * 255).astype(np.uint8)
