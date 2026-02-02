@@ -19,57 +19,58 @@ git clone https://github.com/machinepainting/ComfyUI-MachinePaintingNodes.git
 
 ### Dependencies
 ```bash
-pip install -r requirements.txt```
+pip install -r requirements.txt
+```
 
 ---
 
 ## Nodes (21 Total)
 
-### 🎨 Color Adjustment
+### Color Adjustment
 
 | Node | Description |
 |------|-------------|
-| **👾 Curves Adjust Pro** | Interactive Photoshop-style curves with RGB/R/G/B channels, 17 presets, mask support, channel-mask support |
-| **👾 Levels Adjust** | Black point, white point, gamma, output levels |
-| **👾 Auto Levels** | Automatic levels correction |
-| **👾 Selective Color Pro** | CMYK adjustments for specific color ranges and fine tuned color adjustments (reds, yellows, greens, cyans, blues, magentas, whites, neutrals, blacks) |
-| **👾 Brightness Contrast Adjust** | Simple brightness and contrast controls with simple slider controls |
-| **👾 Color Match Blend** | Match colors from one image to another with adjustments |
-| **👾 Color Adjust Blend** | Adjust Color range for Shadows, Mid-Range, and Highlights. Optional Color Match Blend Color |
-| **👾 LUT Apply** | Apply .cube/.3dl LUT files for cinematic color grading (includes 5 bundled LUTs) |
+| **Curves Adjust Pro** | Interactive Photoshop-style curves with RGB/R/G/B channels, 17 presets, mask support, channel-mask support |
+| **Levels Adjust** | Black point, white point, gamma, output levels |
+| **Auto Levels** | Automatic levels correction |
+| **Selective Color Pro** | CMYK adjustments for specific color ranges and fine tuned color adjustments (reds, yellows, greens, cyans, blues, magentas, whites, neutrals, blacks) |
+| **Brightness Contrast Adjust** | Simple brightness and contrast controls with simple slider controls |
+| **Color Match Blend** | Match colors from one image to another with adjustments |
+| **Color Adjust Blend** | Adjust Color range for Shadows, Mid-Range, and Highlights. Optional Color Match Blend Color |
+| **LUT Apply** | Apply .cube/.3dl LUT files for cinematic color grading (includes 5 bundled LUTs) |
 
-### 🖼️ Blending
-
-| Node | Description |
-|------|-------------|
-| **👾 Image Blend Pro** | Blend images with 15 blend modes (normal, overlay, multiply, screen, soft light, hard light, etc.) |
-
-### 🎭 Mask & Background
+### Blending
 
 | Node | Description |
 |------|-------------|
-| **👾 Remove Background Pro** | Advanced AI-powered background removal with 8 rembg models, mask editing tools, multiple preview modes |
-| **👾 Mask Editor** | Stand alone Mask Tools. Refine masks with grow/shrink/blur/fill |
-| **👾 Apply Mask** | Composite image with mask and background options |
-| **👾 Channel Mask Pro** | Extract R/G/B/A channels as separate masks with levels/contrast adjustments and input mask support for advanced Channel Masking|
+| **Image Blend Pro** | Blend images with 15 blend modes (normal, overlay, multiply, screen, soft light, hard light, etc.) |
 
-### 📊 Analysis
+### Mask and Background
 
 | Node | Description |
 |------|-------------|
-| **👾 Histogram View** | Display RGB/luminance histogram in-node for advanced image setting color display|
-| **👾 Color Wheel View** | Display vectorscope color distribution in-node for advanced image setting color display |
+| **Remove Background Pro** | Advanced AI-powered background removal with 8 rembg models, mask editing tools, multiple preview modes |
+| **Mask Editor** | Stand alone Mask Tools. Refine masks with grow/shrink/blur/fill |
+| **Apply Mask** | Composite image with mask and background options |
+| **Channel Mask Pro** | Extract R/G/B/A channels as separate masks with levels/contrast adjustments and input mask support for advanced Channel Masking|
 
-### 🔧 Utilities
+### Analysis
 
 | Node | Description |
 |------|-------------|
-| **👾 Boolean** | Output a true/false value |
-| **👾 Boolean Invert** | Flip boolean value (true→false, false→true) for advanced workflow pipline and settings switching |
-| **👾 Boolean Switch Value Output** | Output different values based on boolean for advanced workflow pipline and settings switching |
-| **👾 Boolean Input Value Switch** | Route inputs based on boolean for advanced workflow pipline and settings switching |
-| **👾 Boolean Master Switch** | Control multiple booleans from one switch for controlling multiple switches with one master switch node |
-| **👾 Seed Lock** | Lock/unlock seed values with a toggle to lock the current seed vaule, opposed to the standard where the following run seed value is locked |
+| **Histogram View** | Display RGB/luminance histogram in-node for advanced image setting color display|
+| **Color Wheel View** | Display vectorscope color distribution in-node for advanced image setting color display |
+
+### Utilities
+
+| Node | Description |
+|------|-------------|
+| **Boolean** | Output a true/false value |
+| **Boolean Invert** | Flip boolean value (true to false, false to true) for advanced workflow pipline and settings switching |
+| **Boolean Switch Value Output** | Output different values based on boolean for advanced workflow pipline and settings switching |
+| **Boolean Input Value Switch** | Route inputs based on boolean for advanced workflow pipline and settings switching |
+| **Boolean Master Switch** | Control multiple booleans from one switch for controlling multiple switches with one master switch node |
+| **Seed Lock** | Lock/unlock seed values with a toggle to lock the current seed vaule, opposed to the standard where the following run seed value is locked |
 
 ---
 
@@ -138,12 +139,14 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 ---
 
-## Want to Auto Send your ComfyUI output files from your cloud to your Google Dive or Dropbox Account? 
+## Want to Auto Send your ComfyUI output files from your cloud to your Google Drive or Dropbox Account? 
 
-Check out these new Nodes to advance your Ai workflows. Super helpful tools to protect your creations and streamline your process. 
-DriveSend and DropSend node with optional file Encryption. 
-https://github.com/machinepainting/ComfyUI_DriveSendNode
-https://github.com/machinepainting/ComfyUI_DropSendNode
+Check out these new Nodes to advance your Ai workflows. Super helpful tools to protect your creations and streamline your process. DriveSend and DropSend node with optional file Encryption.
+
+- [ComfyUI_DriveSendNode](https://github.com/machinepainting/ComfyUI_DriveSendNode)
+- [ComfyUI_DropSendNode](https://github.com/machinepainting/ComfyUI_DropSendNode)
+
+---
 
 ## Tags
 
