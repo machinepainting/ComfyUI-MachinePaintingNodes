@@ -329,32 +329,80 @@ app.registerExtension({
             drawBtn(this.clearAllBtn, "Reset All");
         };
         
-        // Interpolation
+        // Interpolation - Smooth curve that doesn't create S-curves
         nodeType.prototype.interpolateCurve = function(points, num) {
             if (points.length < 2) return [[0, 0], [1, 1]];
+            
+            const sorted = [...points].sort((a, b) => a[0] - b[0]);
+            const n = sorted.length;
+            
+            if (n === 2) {
+                const result = [];
+                for (let i = 0; i <= num; i++) {
+                    const t = i / num;
+                    const y = sorted[0][1] + (sorted[1][1] - sorted[0][1]) * t;
+                    result.push([t, y]);
+                }
+                return result;
+            }
+            
+            // Calculate tangents - each point's tangent points toward the average of neighbors
+            const tangents = [];
+            for (let i = 0; i < n; i++) {
+                if (i === 0) {
+                    tangents.push((sorted[1][1] - sorted[0][1]) / (sorted[1][0] - sorted[0][0]));
+                } else if (i === n - 1) {
+                    tangents.push((sorted[n-1][1] - sorted[n-2][1]) / (sorted[n-1][0] - sorted[n-2][0]));
+                } else {
+                    // Use weighted average based on segment lengths
+                    const dx0 = sorted[i][0] - sorted[i-1][0];
+                    const dx1 = sorted[i+1][0] - sorted[i][0];
+                    const dy0 = sorted[i][1] - sorted[i-1][1];
+                    const dy1 = sorted[i+1][1] - sorted[i][1];
+                    const s0 = dy0 / dx0;
+                    const s1 = dy1 / dx1;
+                    // Weighted by opposite segment length for smoother result
+                    tangents.push((s0 * dx1 + s1 * dx0) / (dx0 + dx1));
+                }
+            }
+            
+            // Generate curve points
             const result = [];
             for (let i = 0; i <= num; i++) {
-                const t = i / num;
-                result.push([t, Math.max(0, Math.min(1, this.catmullRom(points, t)))]);
+                const x = i / num;
+                
+                // Find segment
+                let seg = 0;
+                for (let j = 0; j < n - 1; j++) {
+                    if (x >= sorted[j][0] && x <= sorted[j + 1][0]) {
+                        seg = j;
+                        break;
+                    }
+                    if (j === n - 2) seg = j;
+                }
+                
+                const p1 = sorted[seg];
+                const p2 = sorted[seg + 1];
+                const h = p2[0] - p1[0];
+                const t = h > 0.0001 ? (x - p1[0]) / h : 0;
+                
+                // Hermite interpolation with calculated tangents
+                const m1 = tangents[seg] * h;
+                const m2 = tangents[seg + 1] * h;
+                
+                const t2 = t * t;
+                const t3 = t2 * t;
+                
+                const h00 = 2*t3 - 3*t2 + 1;
+                const h10 = t3 - 2*t2 + t;
+                const h01 = -2*t3 + 3*t2;
+                const h11 = t3 - t2;
+                
+                const y = h00 * p1[1] + h10 * m1 + h01 * p2[1] + h11 * m2;
+                
+                result.push([x, Math.max(0, Math.min(1, y))]);
             }
             return result;
-        };
-        
-        nodeType.prototype.catmullRom = function(pts, x) {
-            const n = pts.length - 1;
-            let seg = 0;
-            for (let j = 0; j < n; j++) {
-                if (x >= pts[j][0] && x <= pts[j + 1][0]) { seg = j; break; }
-                if (j === n - 1) seg = j;
-            }
-            const p0 = pts[Math.max(0, seg - 1)][1];
-            const p1 = pts[seg][1];
-            const p2 = pts[Math.min(n, seg + 1)][1];
-            const p3 = pts[Math.min(n, seg + 2)][1];
-            const x0 = pts[seg][0], x1 = pts[Math.min(n, seg + 1)][0];
-            const t = x1 - x0 > 0.0001 ? (x - x0) / (x1 - x0) : 0;
-            const t2 = t * t, t3 = t2 * t;
-            return 0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 + (-p0 + 3 * p1 - 3 * p2 + p3) * t3);
         };
         
         // Mouse handling
