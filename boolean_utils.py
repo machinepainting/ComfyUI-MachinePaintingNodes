@@ -1,21 +1,38 @@
+# boolean_utils.py
+# Combined boolean utility nodes for MachinePaintingNodes
+
+import random
+
+
 class Boolean:
     """
-    Simple boolean value output.
+    Simple standalone Boolean toggle
+    MachinePaintingNodes - For use with boolean toggle inputs on nodes. 
     """
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "value": ("BOOLEAN", {"default": False}),
-            },
+                "boolean": ("BOOLEAN", {
+                    "default": True,
+                    "label_on": "true",
+                    "label_off": "false"
+                }),
+            }
         }
 
     RETURN_TYPES = ("BOOLEAN",)
+    RETURN_NAMES = ("boolean",)
     FUNCTION = "execute"
     CATEGORY = "MachinePaintingNodes"
 
-    def execute(self, value):
-        return (value,)
+    def execute(self, boolean=True):
+        return (boolean,)
+
+    @classmethod
+    def IS_CHANGED(cls, **kwargs):
+        return float("NaN")
 
 
 class BooleanInvert:
@@ -40,95 +57,150 @@ class BooleanInvert:
 
 
 class BooleanSwitchValueOutput:
-    """
-    Output different values based on boolean input.
-    """
+    TITLE = "Boolean Switch Value - (INT/FLOAT)"
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "boolean": ("BOOLEAN", {"default": False}),
-                "value_if_true": ("FLOAT", {"default": 1.0, "min": -1000.0, "max": 1000.0, "step": 0.01}),
-                "value_if_false": ("FLOAT", {"default": 0.0, "min": -1000.0, "max": 1000.0, "step": 0.01}),
+                "true_value": ("FLOAT", {
+                    "default": 1.00,
+                    "min": -9999.0,
+                    "max": 9999.0,
+                    "step": 0.01,
+                    "display": "number"
+                }),
+                "false_value": ("FLOAT", {
+                    "default": 0.00,
+                    "min": -9999.0,
+                    "max": 9999.0,
+                    "step": 0.01,
+                    "display": "number"
+                }),
             },
+            "optional": {
+                "boolean": ("BOOLEAN", {"label": "boolean"}),
+            }
         }
 
-    RETURN_TYPES = ("FLOAT", "INT")
-    RETURN_NAMES = ("float_value", "int_value")
+    RETURN_TYPES = ("INT", "FLOAT")
+    RETURN_NAMES = ("INT", "FLOAT")
     FUNCTION = "switch"
     CATEGORY = "MachinePaintingNodes"
 
-    def switch(self, boolean, value_if_true, value_if_false):
-        result = value_if_true if boolean else value_if_false
-        return (result, int(result))
+    def switch(self, true_value=1.00, false_value=0.00, boolean=None):
+        value = boolean if boolean is not None else True
+        result = true_value if value else false_value
+        return (int(result), float(result))
 
 
 class BooleanInputValueSwitch:
-    """
-    Route different inputs based on boolean.
-    Supports multiple input types.
-    """
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "boolean": ("BOOLEAN", {"default": False}),
-            },
-            "optional": {
-                "image_if_true": ("IMAGE",),
-                "image_if_false": ("IMAGE",),
-                "mask_if_true": ("MASK",),
-                "mask_if_false": ("MASK",),
-                "latent_if_true": ("LATENT",),
-                "latent_if_false": ("LATENT",),
-                "float_if_true": ("FLOAT", {"default": 1.0, "min": -1000.0, "max": 1000.0, "step": 0.01}),
-                "float_if_false": ("FLOAT", {"default": 0.0, "min": -1000.0, "max": 1000.0, "step": 0.01}),
-                "int_if_true": ("INT", {"default": 1, "min": -1000, "max": 1000, "step": 1}),
-                "int_if_false": ("INT", {"default": 0, "min": -1000, "max": 1000, "step": 1}),
-                "string_if_true": ("STRING", {"default": "", "multiline": True}),
-                "string_if_false": ("STRING", {"default": "", "multiline": True}),
-            },
+                "FLOAT_input": ("FLOAT", {
+                    "forceInput": True,
+                }),
+                "true_min": ("FLOAT", {
+                    "default": 0.51,
+                    "min": -9999.0,
+                    "max": 9999.0,
+                    "step": 0.01,
+                    "display": "number"
+                }),
+                "true_max": ("FLOAT", {
+                    "default": 1.00,
+                    "min": -9999.0,
+                    "max": 9999.0,
+                    "step": 0.01,
+                    "display": "number"
+                }),
+                "false_min": ("FLOAT", {
+                    "default": 0.00,
+                    "min": -9999.0,
+                    "max": 9999.0,
+                    "step": 0.01,
+                    "display": "number"
+                }),
+                "false_max": ("FLOAT", {
+                    "default": 0.50,
+                    "min": -9999.0,
+                    "max": 9999.0,
+                    "step": 0.01,
+                    "display": "number"
+                }),
+                "overlap_behavior": ([
+                    "randomize",
+                    "force_true",
+                    "force_false"
+                ], {
+                    "default": "randomize",
+                    "tooltip": "What to do when value falls in both ranges"
+                }),
+            }
         }
 
-    RETURN_TYPES = ("IMAGE", "MASK", "LATENT", "FLOAT", "INT", "STRING")
-    RETURN_NAMES = ("image", "mask", "latent", "float", "int", "string")
-    FUNCTION = "switch"
+    RETURN_TYPES = ("BOOLEAN",)
+    RETURN_NAMES = ("boolean",)
+    FUNCTION = "evaluate"
     CATEGORY = "MachinePaintingNodes"
 
-    def switch(self, boolean, 
-               image_if_true=None, image_if_false=None,
-               mask_if_true=None, mask_if_false=None,
-               latent_if_true=None, latent_if_false=None,
-               float_if_true=1.0, float_if_false=0.0,
-               int_if_true=1, int_if_false=0,
-               string_if_true="", string_if_false=""):
-        
-        image = image_if_true if boolean else image_if_false
-        mask = mask_if_true if boolean else mask_if_false
-        latent = latent_if_true if boolean else latent_if_false
-        float_val = float_if_true if boolean else float_if_false
-        int_val = int_if_true if boolean else int_if_false
-        string_val = string_if_true if boolean else string_if_false
-        
-        return (image, mask, latent, float_val, int_val, string_val)
+    @classmethod
+    def IS_CHANGED(cls, FLOAT_input, true_min, true_max, false_min, false_max, overlap_behavior, **kwargs):
+        if overlap_behavior == "randomize":
+            return float("nan")
+        return float("inf")
+
+    def evaluate(self, FLOAT_input,
+                 true_min=0.51, true_max=1.00,
+                 false_min=0.00, false_max=0.50,
+                 overlap_behavior="randomize"):
+
+        value = FLOAT_input
+
+        in_true = true_min <= value <= true_max
+        in_false = false_min <= value <= false_max
+
+        if in_true and in_false:
+            if overlap_behavior == "randomize":
+                return (random.choice([True, False]),)
+            elif overlap_behavior == "force_true":
+                return (True,)
+            else:
+                return (False,)
+        elif in_true:
+            return (True,)
+        elif in_false:
+            return (False,)
+        else:
+            return (False,)
 
 
 class BooleanMasterSwitch:
-    """
-    Master control for multiple boolean outputs.
-    """
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "master": ("BOOLEAN", {"default": False}),
-            },
+                "master": ("BOOLEAN", {
+                    "default": True,
+                    "label_on": "TRUE",
+                    "label_off": "FALSE"
+                }),
+            }
         }
 
-    RETURN_TYPES = ("BOOLEAN", "BOOLEAN", "BOOLEAN", "BOOLEAN")
-    RETURN_NAMES = ("out_1", "out_2", "out_3", "out_4")
-    FUNCTION = "switch"
+    RETURN_TYPES = ("BOOLEAN",)
+    RETURN_NAMES = ("out_1",)
+    FUNCTION = "execute"
     CATEGORY = "MachinePaintingNodes"
 
-    def switch(self, master):
-        return (master, master, master, master)
+    OUTPUT_IS_LIST = (True,)
+    OUTPUT_MAX_LIST_LENGTH = 25
+
+    def execute(self, master: bool):
+        return ([master],)
+
+    @classmethod
+    def IS_CHANGED(cls, **kwargs):
+        return float("NaN")
