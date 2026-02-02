@@ -131,7 +131,7 @@ class CurvesAdjustPro:
     CATEGORY = "MachinePaintingNodes"
 
     def catmull_rom_spline(self, points, num_samples=256):
-        """Create smooth curve through control points. Empty = no change."""
+        """Smooth curve using weighted tangent averaging - no S-curves."""
         if len(points) < 2:
             return np.linspace(0, 1, num_samples)
         
@@ -143,36 +143,62 @@ class CurvesAdjustPro:
         if points[-1][0] < 0.999:
             points.append([1, points[-1][1]])
         
+        n = len(points)
+        
+        if n == 2:
+            lut = np.zeros(num_samples)
+            for i in range(num_samples):
+                t = i / (num_samples - 1)
+                lut[i] = points[0][1] + (points[1][1] - points[0][1]) * t
+            return lut
+        
+        # Calculate tangents using weighted average
+        tangents = []
+        for i in range(n):
+            if i == 0:
+                tangents.append((points[1][1] - points[0][1]) / (points[1][0] - points[0][0]))
+            elif i == n - 1:
+                tangents.append((points[n-1][1] - points[n-2][1]) / (points[n-1][0] - points[n-2][0]))
+            else:
+                dx0 = points[i][0] - points[i-1][0]
+                dx1 = points[i+1][0] - points[i][0]
+                dy0 = points[i][1] - points[i-1][1]
+                dy1 = points[i+1][1] - points[i][1]
+                s0 = dy0 / dx0
+                s1 = dy1 / dx1
+                tangents.append((s0 * dx1 + s1 * dx0) / (dx0 + dx1))
+        
         lut = np.zeros(num_samples)
         
         for i in range(num_samples):
             x = i / (num_samples - 1)
             
+            # Find segment
             seg = 0
-            for j in range(len(points) - 1):
+            for j in range(n - 1):
                 if points[j][0] <= x <= points[j + 1][0]:
                     seg = j
                     break
-                if j == len(points) - 2:
+                if j == n - 2:
                     seg = j
             
-            p0 = points[max(0, seg - 1)]
             p1 = points[seg]
-            p2 = points[min(len(points) - 1, seg + 1)]
-            p3 = points[min(len(points) - 1, seg + 2)]
+            p2 = points[seg + 1]
+            h = p2[0] - p1[0]
+            t = (x - p1[0]) / h if h > 0.0001 else 0
             
-            x0, x1 = p1[0], p2[0]
-            t = 0 if x1 - x0 < 0.0001 else (x - x0) / (x1 - x0)
+            m1 = tangents[seg] * h
+            m2 = tangents[seg + 1] * h
             
             t2 = t * t
             t3 = t2 * t
             
-            y = 0.5 * (
-                (2 * p1[1]) +
-                (-p0[1] + p2[1]) * t +
-                (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 +
-                (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3
-            )
+            h00 = 2*t3 - 3*t2 + 1
+            h10 = t3 - 2*t2 + t
+            h01 = -2*t3 + 3*t2
+            h11 = t3 - t2
+            
+            y = h00 * p1[1] + h10 * m1 + h01 * p2[1] + h11 * m2
             
             lut[i] = np.clip(y, 0, 1)
         
