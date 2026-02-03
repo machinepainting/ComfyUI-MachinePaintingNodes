@@ -4,6 +4,7 @@
 
 A comprehensive node suite for professional level image processing, color correction, and advanced workflow enhancement utilities. 
 
+(All current nodes displayed in image below)
 ![machinePainting Nodes Overview](images/MachinePaintingNodes_display.jpg)
 
 ## Installation
@@ -28,6 +29,8 @@ pip install -r requirements.txt
 
 ### Color Adjustment
 
+![machinePainting Nodes Display](images/MachinePaintingNodes_display.jpg)
+
 | Node | Description |
 |------|-------------|
 | **Curves Adjust Pro** | Interactive Photoshop-style curves with RGB/R/G/B channels, 17 presets, mask support, channel-mask support |
@@ -39,11 +42,10 @@ pip install -r requirements.txt
 | **Color Adjust Blend** | Adjust Color range for Shadows, Mid-Range, and Highlights. Optional Color Match Blend Color |
 | **LUT Apply** | Apply .cube/.3dl LUT files for cinematic color grading (includes 5 bundled LUTs) |
 
-### Blending
-
-| Node | Description |
-|------|-------------|
-| **Image Blend Pro** | Blend images with 15 blend modes (normal, overlay, multiply, screen, soft light, hard light, etc.) |
+(examples)
+![machinePainting Nodes Display](images/curves_display.jpg)
+![machinePainting Nodes Display](images/color_match_blend_display.jpg)
+![machinePainting Nodes Display](images/color_adjust_blend_display.jpg)
 
 ### Mask and Background
 
@@ -52,7 +54,17 @@ pip install -r requirements.txt
 | **Remove Background Pro** | Advanced AI-powered background removal with 8 rembg models, mask editing tools, multiple preview modes |
 | **Mask Editor** | Stand alone Mask Tools. Refine masks with grow/shrink/blur/fill |
 | **Apply Mask** | Composite image with mask and background options |
-| **Channel Mask Pro** | Extract R/G/B/A channels as separate masks with levels/contrast adjustments and input mask support for advanced Channel Masking|
+| **Channel Mask Pro** | Extract R/G/B/A channels as separate masks with levels/contrast adjustments and input mask support for advanced Channel Masking |
+
+(examples)
+![machinePainting Nodes Display](images/remove_background_pro_selective_color_pro_display.jpg)
+![machinePainting Nodes Display](images/channel_mask_pro_display.jpg)
+
+### Blending
+
+| Node | Description |
+|------|-------------|
+| **Image Blend Pro** | Blend images with 15 blend modes (normal, overlay, multiply, screen, soft light, hard light, etc.) |
 
 ### Analysis
 
@@ -60,6 +72,9 @@ pip install -r requirements.txt
 |------|-------------|
 | **Histogram View** | Display RGB/luminance histogram in-node for advanced image setting color display|
 | **Color Wheel View** | Display vectorscope color distribution in-node for advanced image setting color display |
+
+(examples)
+![machinePainting Nodes Display](images/histogram_view_display.jpg)
 
 ### Utilities
 
@@ -78,11 +93,11 @@ pip install -r requirements.txt
 
 ### Curves Adjust Pro
 - Interactive curve editor with click-to-add, drag-to-move, shift-click-to-remove points
-- Separate RGB, Red, Green, Blue channels
+- Separate RGB, Red, Green, Blue channel curve editing
 - 17 built-in presets (S-Curve Contrast, Fade, Cross Process, Cinematic, etc.)
 - Visual display of all channel curves in RGB mode
 - Mask support with invert option
-- Catmull-Rom spline interpolation for smooth curves
+- Spline interpolation for smooth curves
 
 ### LUT Apply
 - Supports .cube and .3dl LUT formats
@@ -118,7 +133,12 @@ pip install -r requirements.txt
 
 ## Changelog
 
+### v2.0.1
+Updated Node Settings, Resolved Display Issues, Fixed Several Node structures. 
+
 ### v2.0.0
+Major Overhaul, Node Additions, and Improvements
+
 - **New Nodes:** LUT Apply, Channel Mask Pro, Selective Color Pro, Boolean Invert
 - **Bundled LUTs:** 5 color grading LUTs included with auto-install
 - **Curves Adjust Pro:** Added mask support, improved curve display showing all channels in RGB mode
