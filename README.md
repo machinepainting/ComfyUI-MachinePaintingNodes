@@ -4,6 +4,8 @@
 
 A comprehensive node suite for professional level image processing, color correction, and advanced workflow enhancement utilities. 
 
+![machinePainting Nodes Overview](images/MachinePaintingNodes_display.jpg)
+
 ## Installation
 
 ### ComfyUI Manager (Recommended)
