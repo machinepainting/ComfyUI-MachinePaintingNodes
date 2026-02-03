@@ -11,9 +11,9 @@ app.registerExtension({
         nodeType.prototype.onNodeCreated = function() {
             onNodeCreated?.apply(this, arguments);
             
-            // Set initial node size
-            this.size[0] = Math.max(this.size[0], 280);
-            this.size[1] = Math.max(this.size[1], 280);
+            // Set initial node size with room for button
+            this.size[0] = Math.max(this.size[0], 300);
+            this.size[1] = Math.max(this.size[1], 320);
         };
         
         const onDrawForeground = nodeType.prototype.onDrawForeground;
@@ -25,33 +25,28 @@ app.registerExtension({
             const nodeWidth = this.size[0];
             const nodeHeight = this.size[1];
             
-            // Calculate position after widgets
-            let widgetsEnd = 30;
-            if (this.widgets) {
-                for (const w of this.widgets) {
-                    if (w.type === "converted-widget") continue;
-                    widgetsEnd += 24;
-                }
-            }
-            
-            // Reset button
-            const btnW = 80;
-            const btnH = 20;
+            // Reset button at bottom of node with padding
+            const btnW = 100;
+            const btnH = 26;
             const btnX = (nodeWidth - btnW) / 2;
-            const btnY = widgetsEnd + 5;
+            const btnY = nodeHeight - btnH - 15;
             
             this.resetBtn = { x: btnX, y: btnY, w: btnW, h: btnH };
             
-            ctx.fillStyle = "#3a3a3a";
+            // Button background
+            ctx.fillStyle = "#4a4a4a";
             ctx.beginPath();
-            ctx.roundRect(btnX, btnY, btnW, btnH, 3);
+            ctx.roundRect(btnX, btnY, btnW, btnH, 5);
             ctx.fill();
-            ctx.strokeStyle = "#4a4a4a";
+            
+            // Button border
+            ctx.strokeStyle = "#666";
             ctx.lineWidth = 1;
             ctx.stroke();
             
-            ctx.fillStyle = "#aaa";
-            ctx.font = "11px Arial";
+            // Button text
+            ctx.fillStyle = "#ddd";
+            ctx.font = "12px Arial";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText("Reset All", btnX + btnW / 2, btnY + btnH / 2);
