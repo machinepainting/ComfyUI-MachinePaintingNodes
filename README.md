@@ -4,7 +4,7 @@
 
 A comprehensive node suite for professional level image processing, color correction, and advanced workflow enhancement utilities. 
 
-(All current nodes displayed in image below)
+(All current nodes.)
 ![machinePainting Nodes Overview](images/MachinePaintingNodes_display.jpg)
 
 ## Installation
@@ -29,7 +29,8 @@ pip install -r requirements.txt
 
 ### Color Adjustment
 
-![machinePainting Nodes Display](images/MachinePaintingNodes_display.jpg)
+(example)
+![machinePainting Nodes Display](images/curves_display.jpg)
 
 | Node | Description |
 |------|-------------|
