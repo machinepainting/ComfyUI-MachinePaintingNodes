@@ -44,7 +44,6 @@ pip install -r requirements.txt
 | **LUT Apply** | Apply .cube/.3dl LUT files for cinematic color grading (includes 5 bundled LUTs) |
 
 (examples)
-![machinePainting Nodes Display](images/curves_display.jpg)
 ![machinePainting Nodes Display](images/color_match_blend_display.jpg)
 ![machinePainting Nodes Display](images/color_adjust_blend_display.jpg)
 
@@ -74,7 +73,7 @@ pip install -r requirements.txt
 | **Histogram View** | Display RGB/luminance histogram in-node for advanced image setting color display|
 | **Color Wheel View** | Display vectorscope color distribution in-node for advanced image setting color display |
 
-(examples)
+(example)
 ![machinePainting Nodes Display](images/histogram_view_display.jpg)
 
 ### Utilities
@@ -87,6 +86,9 @@ pip install -r requirements.txt
 | **Boolean Input Value Switch** | Route inputs based on boolean for advanced workflow pipline and settings switching |
 | **Boolean Master Switch** | Control multiple booleans from one switch for controlling multiple switches with one master switch node |
 | **Seed Lock** | Lock/unlock seed values with a toggle to lock the current seed vaule, opposed to the standard where the following run seed value is locked |
+
+(example)
+![machinePainting Nodes Display](images/boolean_display.jpg)
 
 ---
 
