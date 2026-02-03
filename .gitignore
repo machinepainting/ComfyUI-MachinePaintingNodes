@@ -40,14 +40,5 @@ ComfyUI/models/
 ComfyUI/temp/
 ComfyUI/logs/
 
-# Optional: exclude large preview files (if you add them later)
-*.gif
-*.png
-*.jpg
-*.jpeg
-*.mp4
-*.webm
-*.mov
-
 # But keep preview folder in repo (for docs)
 !preview/
