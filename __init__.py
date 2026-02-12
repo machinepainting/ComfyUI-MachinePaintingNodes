@@ -24,6 +24,7 @@ from .lut_apply import LUTApply
 from .seed_lock import SeedLock
 from .text_notes import TextNotes
 from .show_text import ShowText
+from .text_string import TextString
 
 NODE_CLASS_MAPPINGS = {
     # Color Adjustment
@@ -54,6 +55,7 @@ NODE_CLASS_MAPPINGS = {
     "SeedLock": SeedLock,
     "TextNotes": TextNotes,
     "ShowText": ShowText,
+    "TextString": TextString,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -85,9 +87,10 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SeedLock": "👾 Seed Lock",
     "TextNotes": "👾 Text Notes",
     "ShowText": "👾 Show Text",
+    "TextString": "👾 Text String",
 }
 
 WEB_DIRECTORY = "./js"
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
 
-print("ComfyUI-MachinePaintingNodes v2.0.2: Loaded 23 nodes")
+print("ComfyUI-MachinePaintingNodes v2.0.2: Loaded 24 nodes")
