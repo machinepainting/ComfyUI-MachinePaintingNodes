@@ -1,7 +1,7 @@
 # __init__.py
 
 """
-ComfyUI-MachinePaintingNodes v2.0.0
+ComfyUI-MachinePaintingNodes v2.0.1
 Professional color grading, mask tools, and utilities for ComfyUI
 """
 
@@ -22,6 +22,8 @@ from .channel_mask_pro import ChannelMaskPro
 from .selective_color_pro import SelectiveColorPro
 from .lut_apply import LUTApply
 from .seed_lock import SeedLock
+from .text_notes import TextNotes
+from .show_text import ShowText
 
 NODE_CLASS_MAPPINGS = {
     # Color Adjustment
@@ -50,6 +52,8 @@ NODE_CLASS_MAPPINGS = {
     "BooleanInputValueSwitch": BooleanInputValueSwitch,
     "BooleanMasterSwitch": BooleanMasterSwitch,
     "SeedLock": SeedLock,
+    "TextNotes": TextNotes,
+    "ShowText": ShowText,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -79,9 +83,11 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BooleanInputValueSwitch": "👾 Boolean Input Value Switch",
     "BooleanMasterSwitch": "👾 Boolean Master Switch",
     "SeedLock": "👾 Seed Lock",
+    "TextNotes": "👾 Text Notes",
+    "ShowText": "👾 Show Text",
 }
 
 WEB_DIRECTORY = "./js"
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
 
-print("ComfyUI-MachinePaintingNodes v2.0.0: Loaded 21 nodes")
+print("ComfyUI-MachinePaintingNodes v2.0.1: Loaded 23 nodes")
