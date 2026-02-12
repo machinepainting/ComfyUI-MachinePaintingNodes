@@ -17,7 +17,7 @@ class SeedLock:
     RETURN_TYPES = ("INT",)
     RETURN_NAMES = ("seed",)
     FUNCTION = "execute"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Util"
 
     def execute(self, seed, locked_seed, lock):
         if lock:

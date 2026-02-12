@@ -25,7 +25,7 @@ class Boolean:
     RETURN_TYPES = ("BOOLEAN",)
     RETURN_NAMES = ("boolean",)
     FUNCTION = "execute"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Util"
 
     def execute(self, boolean=True):
         return (boolean,)
@@ -50,7 +50,7 @@ class BooleanInvert:
     RETURN_TYPES = ("BOOLEAN",)
     RETURN_NAMES = ("inverted",)
     FUNCTION = "invert"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Util"
 
     def invert(self, value):
         return (not value,)
@@ -86,7 +86,7 @@ class BooleanSwitchValueOutput:
     RETURN_TYPES = ("INT", "FLOAT")
     RETURN_NAMES = ("INT", "FLOAT")
     FUNCTION = "switch"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Util"
 
     def switch(self, true_value=1.00, false_value=0.00, boolean=None):
         value = boolean if boolean is not None else True
@@ -144,7 +144,7 @@ class BooleanInputValueSwitch:
     RETURN_TYPES = ("BOOLEAN",)
     RETURN_NAMES = ("boolean",)
     FUNCTION = "evaluate"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Util"
 
     @classmethod
     def IS_CHANGED(cls, FLOAT_input, true_min, true_max, false_min, false_max, overlap_behavior, **kwargs):
@@ -193,7 +193,7 @@ class BooleanMasterSwitch:
     RETURN_TYPES = ("BOOLEAN",)
     RETURN_NAMES = ("out_1",)
     FUNCTION = "execute"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Util"
 
     OUTPUT_IS_LIST = (True,)
     OUTPUT_MAX_LIST_LENGTH = 25

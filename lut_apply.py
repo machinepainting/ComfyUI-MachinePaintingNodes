@@ -57,7 +57,7 @@ class LUTApply:
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("image",)
     FUNCTION = "apply_lut"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Color"
 
     def apply_lut(self, image, lut_file, intensity=1.0):
         if lut_file == "none":

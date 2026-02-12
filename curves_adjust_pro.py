@@ -128,7 +128,7 @@ class CurvesAdjustPro:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "apply_curves"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Color"
 
     def catmull_rom_spline(self, points, num_samples=256):
         """Smooth curve using weighted tangent averaging - no S-curves."""

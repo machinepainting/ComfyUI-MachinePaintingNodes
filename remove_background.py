@@ -90,7 +90,7 @@ class RemoveBackgroundPro:
     RETURN_NAMES = ("image_passthrough", "masked_image", "mask", "mask_bw")
     OUTPUT_NODE = True
     FUNCTION = "remove_background"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Mask"
 
     def remove_background(self, image, model,
                           grow_shrink=0, blur_radius=0.0, fill_holes=False,
@@ -358,7 +358,7 @@ class MaskEditor:
     RETURN_TYPES = ("MASK", "IMAGE")
     RETURN_NAMES = ("mask", "mask_preview")
     FUNCTION = "edit_mask"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Mask"
 
     def edit_mask(self, mask, grow_shrink=0, blur_radius=0.0, fill_holes=False,
                   hole_size_threshold=500, invert=False, threshold=0.5, apply_threshold=False):
@@ -443,7 +443,7 @@ class ApplyMask:
     RETURN_TYPES = ("IMAGE", "IMAGE")
     RETURN_NAMES = ("masked_image", "rgba_image")
     FUNCTION = "apply_mask"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Mask"
 
     def apply_mask(self, image, mask, background="transparent", 
                    bg_color_r=0, bg_color_g=0, bg_color_b=0, invert_mask=False):

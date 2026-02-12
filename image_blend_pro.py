@@ -21,7 +21,7 @@ class ImageBlendPro:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "blend_images"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Blend"
 
     def blend_images(self, image1, image2, blend_amount, blend_mode):
         img1 = (image1[0].cpu().numpy() * 255).astype(np.uint8)

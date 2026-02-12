@@ -23,7 +23,7 @@ class LevelsAdjust:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "adjust_levels"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Color"
 
     def adjust_levels(self, image, black_point=0.0, white_point=1.0, gamma=1.0, 
                       output_black=0.0, output_white=1.0):
@@ -63,7 +63,7 @@ class AutoLevels:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "auto_levels"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Color"
 
     def auto_levels(self, image, clip_percent=0.1, strength=1.0):
         img = image[0].cpu().numpy().astype(np.float32)
@@ -120,7 +120,7 @@ class BrightnessContrastAdjust:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "adjust"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Color"
 
     def adjust(self, image, brightness, contrast):
         img = image[0].cpu().numpy().astype(np.float32)

@@ -29,7 +29,7 @@ class HistogramView:
     RETURN_TYPES = ()
     OUTPUT_NODE = True
     FUNCTION = "create_histogram"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Analysis"
 
     def create_histogram(self, image, show_rgb=True, show_luminance=True, 
                          line_thickness=1, background="black", unique_id=None):
@@ -138,7 +138,7 @@ class ColorWheelView:
     RETURN_TYPES = ()
     OUTPUT_NODE = True
     FUNCTION = "create_vectorscope"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Analysis"
 
     def create_vectorscope(self, image, intensity=1.0, show_skin_line=True, 
                            show_color_targets=True, unique_id=None):
