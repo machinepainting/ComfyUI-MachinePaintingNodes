@@ -26,7 +26,7 @@ from .text_notes import TextNotes
 from .show_text import ShowText
 from .text_string import TextString
 from .show_value import ShowValue
-from .mega_slider import MegaSliderX1, MegaSliderX3, MegaSliderX6, MegaSliderX12
+from .mega_slider import MegaSliderMasterValue, MegaSliderX1, MegaSliderX3, MegaSliderX6, MegaSliderX12
 from .dynamic_value_range import DynamicValueRange
 
 NODE_CLASS_MAPPINGS = {
@@ -60,6 +60,7 @@ NODE_CLASS_MAPPINGS = {
     "ShowText": ShowText,
     "TextString": TextString,
     "ShowValue": ShowValue,
+    "MegaSliderMasterValue": MegaSliderMasterValue,
     "MegaSliderX1": MegaSliderX1,
     "MegaSliderX3": MegaSliderX3,
     "MegaSliderX6": MegaSliderX6,
@@ -98,6 +99,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ShowText": "👾 Show Text",
     "TextString": "👾 Text String",
     "ShowValue": "👾 Show Value",
+    "MegaSliderMasterValue": "👾 Mega Slider Master Value",
     "MegaSliderX1": "👾 Mega Slider X1",
     "MegaSliderX3": "👾 Mega Slider X3",
     "MegaSliderX6": "👾 Mega Slider X6",
@@ -108,4 +110,4 @@ NODE_DISPLAY_NAME_MAPPINGS = {
 WEB_DIRECTORY = "./js"
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
 
-print("ComfyUI-MachinePaintingNodes v2.0.3: Loaded 30 nodes")
+print("ComfyUI-MachinePaintingNodes v2.0.3: Loaded 31 nodes")
