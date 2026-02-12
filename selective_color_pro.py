@@ -30,7 +30,7 @@ class SelectiveColorPro:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "apply_selective_color"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Color"
 
     def get_color_mask(self, img_rgb, target_color):
         """

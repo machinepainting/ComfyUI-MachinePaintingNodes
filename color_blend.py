@@ -41,7 +41,7 @@ class ColorMatchBlend:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "apply_color_match_blend"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Color"
 
     def apply_color_match_blend(self, target_image, reference_image, strength, 
                                  enable_match_blend, saturation,
@@ -338,7 +338,7 @@ class ColorAdjustBlend:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "apply_color_adjust_blend"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Color"
 
     def apply_color_adjust_blend(self, image, 
                                color_reference=None, reference_strength=0.75, blend_mode="color",

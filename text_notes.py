@@ -20,7 +20,7 @@ class TextNotes:
 
     RETURN_TYPES = ()
     FUNCTION = "do_nothing"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Util"
     OUTPUT_NODE = True
 
     def do_nothing(self, notes, title="Notes"):

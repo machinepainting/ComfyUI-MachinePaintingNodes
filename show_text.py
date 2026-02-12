@@ -15,7 +15,7 @@ class ShowText:
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("text",)
     FUNCTION = "show_text"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Util"
     OUTPUT_NODE = True
 
     def show_text(self, text):

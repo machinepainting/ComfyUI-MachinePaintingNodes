@@ -42,7 +42,7 @@ class ChannelMaskPro:
     RETURN_NAMES = ("red_mask", "green_mask", "blue_mask", "alpha_mask")
     OUTPUT_NODE = True
     FUNCTION = "separate_channels"
-    CATEGORY = "MachinePaintingNodes"
+    CATEGORY = "MachinePaintingNodes/Mask"
 
     def apply_levels(self, channel, black_point, white_point, gamma):
         """Apply levels adjustment to a channel."""
