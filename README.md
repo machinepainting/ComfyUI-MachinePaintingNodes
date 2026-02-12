@@ -25,7 +25,7 @@ pip install -r requirements.txt
 
 ---
 
-## Nodes (21 Total)
+## Nodes (23 Total)
 
 ### Color Adjustment
 
@@ -39,8 +39,8 @@ pip install -r requirements.txt
 | **Auto Levels** | Automatic levels correction |
 | **Selective Color Pro** | CMYK adjustments for specific color ranges and fine tuned color adjustments (reds, yellows, greens, cyans, blues, magentas, whites, neutrals, blacks) |
 | **Brightness Contrast Adjust** | Simple brightness and contrast controls with simple slider controls |
-| **Color Match Blend** | Match colors from one image to another with adjustments |
-| **Color Adjust Blend** | Adjust Color range for Shadows, Mid-Range, and Highlights. Optional Color Match Blend Color |
+| **Color Match Blend** | Match colors from one image to another with multiple methods (statistical, histogram, reinhard), blend modes, and adjustments |
+| **Color Adjust Blend** | Color match with blend modes, plus RGB color balance for Shadows, Mid-Range, and Highlights |
 | **LUT Apply** | Apply .cube/.3dl LUT files for cinematic color grading (includes 5 bundled LUTs) |
 
 (examples)
@@ -86,6 +86,8 @@ pip install -r requirements.txt
 | **Boolean Input Value Switch** | Route inputs based on boolean for advanced workflow pipline and settings switching |
 | **Boolean Master Switch** | Control multiple booleans from one switch for controlling multiple switches with one master switch node |
 | **Seed Lock** | Lock/unlock seed values with a toggle to lock the current seed vaule, opposed to the standard where the following run seed value is locked |
+| **Text Notes** | Add comments and documentation to your workflow for organization |
+| **Show Text** | Display and pass through text output from other nodes for debugging |
 
 (example)
 ![machinePainting Nodes Display](images/boolean_display.jpg)
@@ -101,6 +103,18 @@ pip install -r requirements.txt
 - Visual display of all channel curves in RGB mode
 - Mask support with invert option
 - Spline interpolation for smooth curves
+
+### Color Match Blend
+- 3 matching methods: statistical, histogram, reinhard
+- 10 blend modes: normal, overlay, multiply, screen, soft light, hard light, color, luminosity, darken, lighten
+- Separate luminance and color match controls
+- Saturation adjustment
+
+### Color Adjust Blend
+- Optional color reference input with LAB color matching
+- Blend modes for color application
+- RGB color balance with shadow/midtone/highlight zones
+- Works standalone as simple color balance without reference
 
 ### LUT Apply
 - Supports .cube and .3dl LUT formats
@@ -129,12 +143,29 @@ pip install -r requirements.txt
 ### Selective Color Pro
 - Target specific colors: reds, yellows, greens, cyans, blues, magentas, whites, neutrals, blacks
 - CMYK adjustment sliders (-100 to +100)
+- Smooth RGB-based color detection for natural results
 - Reset All button
 - Mask support
+
+### Text Notes
+- Multiline text area for workflow documentation
+- Optional title field
+- No inputs/outputs - purely organizational
+
+### Show Text
+- Display text output from other nodes
+- Pass-through output for chaining
+- Console logging for debugging
 
 ---
 
 ## Changelog
+
+### v2.0.2
+- **New Nodes:** Text Notes, Show Text utility nodes
+- **Color Match Blend:** Added blend modes (normal, overlay, multiply, screen, soft light, hard light, color, luminosity, darken, lighten)
+- **Color Adjust Blend:** Reworked flow - color match → blend mode → RGB adjustments
+- **Selective Color Pro:** Fixed smooth color detection for natural-looking adjustments
 
 ### v2.0.1
 Updated Node Settings, Resolved Display Issues, Fixed Several Node structures. 
