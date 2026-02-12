@@ -25,7 +25,7 @@ pip install -r requirements.txt
 
 ---
 
-## Nodes (24 Total)
+## Nodes (30 Total)
 
 ### Color Adjustment
 
@@ -89,6 +89,12 @@ pip install -r requirements.txt
 | **Text Notes** | Add comments and documentation to your workflow for organization |
 | **Text String** | Simple text input node for passing strings to other nodes |
 | **Show Text** | Display and pass through text output from other nodes for debugging |
+| **Show Value** | Display any value type (float, int, string, bool) in the node for debugging |
+| **Mega Slider X1** | Single universal slider with per-slider property overrides |
+| **Mega Slider X3** | 3 universal sliders with per-slider property overrides |
+| **Mega Slider X6** | 6 universal sliders with per-slider property overrides |
+| **Mega Slider X12** | 12 universal sliders with per-slider property overrides |
+| **Dynamic Value Range** | Automatically cycles through a value range on each run (increment/decrement/random) |
 
 (example)
 ![machinePainting Nodes Display](images/boolean_display.jpg)
@@ -160,11 +166,33 @@ pip install -r requirements.txt
 ### Show Text
 - Display text output from other nodes
 - Pass-through output for chaining
-- Console logging for debugging
+
+### Show Value
+- Display any value type (float, int, string, bool) in the node
+- Accepts any input type for universal debugging
+
+### Mega Slider X1 / X3 / X6 / X12
+- 1, 3, 6, or 12 universal sliders with individual outputs
+- **Per-slider settings:** Right-click node → Properties to set individual `slider_N_min`, `slider_N_max`, `slider_N_step`
+- Output as float or integer (toggle)
+- Sliders snap to step increments when properties are set
+
+### Dynamic Value Range
+- Automatically cycles through a range of values on each workflow run
+- Modes: increment, decrement, random
+- On cycle complete: reverse direction or jump to other end
+- Outputs: FLOAT, INT, and STRING versions
+- Perfect for creating diversity across batch generations
 
 ---
 
 ## Changelog
+
+### v2.0.3
+- **New Nodes:** Show Value, Mega Slider X1/X3/X6/X12, Dynamic Value Range
+- **Mega Sliders:** Universal slider banks with per-slider settings via right-click → Properties
+- **Dynamic Value Range:** Auto-cycling values for batch diversity (increment/decrement/random modes)
+- **Show Value:** Display any value type in-node for debugging
 
 ### v2.0.2
 - **New Nodes:** Text Notes, Text String, Show Text utility nodes
@@ -207,4 +235,4 @@ Check out these new Nodes to advance your Ai workflows. Super helpful tools to p
 
 ## Tags
 
-`comfyui` `comfyui-nodes` `custom-nodes` `color-grading` `color-correction` `curves` `levels` `lut` `lookup-table` `photoshop` `image-processing` `image-editing` `background-removal` `rembg` `masking` `mask-editor` `channel-mixer` `histogram` `vectorscope` `blend-modes` `compositing` `stable-diffusion` `ai-art` `generative-art` `film-emulation` `cinematic` `color-matching` `hsl` `cmyk` `selective-color` `boolean-logic` `workflow` `utilities`
+`comfyui` `comfyui-nodes` `custom-nodes` `color-grading` `color-correction` `curves` `levels` `lut` `lookup-table` `photoshop` `image-processing` `image-editing` `background-removal` `rembg` `masking` `mask-editor` `channel-mixer` `histogram` `vectorscope` `blend-modes` `compositing` `stable-diffusion` `ai-art` `generative-art` `film-emulation` `cinematic` `color-matching` `hsl` `cmyk` `selective-color` `boolean-logic` `workflow` `utilities` `sliders` `dynamic-values`
