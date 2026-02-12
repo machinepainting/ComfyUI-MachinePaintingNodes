@@ -25,7 +25,7 @@ pip install -r requirements.txt
 
 ---
 
-## Nodes (23 Total)
+## Nodes (24 Total)
 
 ### Color Adjustment
 
@@ -87,6 +87,7 @@ pip install -r requirements.txt
 | **Boolean Master Switch** | Control multiple booleans from one switch for controlling multiple switches with one master switch node |
 | **Seed Lock** | Lock/unlock seed values with a toggle to lock the current seed vaule, opposed to the standard where the following run seed value is locked |
 | **Text Notes** | Add comments and documentation to your workflow for organization |
+| **Text String** | Simple text input node for passing strings to other nodes |
 | **Show Text** | Display and pass through text output from other nodes for debugging |
 
 (example)
@@ -152,6 +153,10 @@ pip install -r requirements.txt
 - Optional title field
 - No inputs/outputs - purely organizational
 
+### Text String
+- Simple text input with multiline support
+- Outputs STRING for connecting to other nodes
+
 ### Show Text
 - Display text output from other nodes
 - Pass-through output for chaining
@@ -162,10 +167,8 @@ pip install -r requirements.txt
 ## Changelog
 
 ### v2.0.2
-- **New Nodes:** Text Notes, Show Text utility nodes
-- **Color Match Blend:** Added blend modes (normal, overlay, multiply, screen, soft light, hard light, color, luminosity, darken, lighten)
-- **Color Adjust Blend:** Reworked flow - color match → blend mode → RGB adjustments
-- **Selective Color Pro:** Fixed smooth color detection for natural-looking adjustments
+- **New Nodes:** Text Notes, Text String, Show Text utility nodes
+- **Organized Categories:** Nodes now grouped into subcategories (Color, Mask, Blend, Analysis, Util)
 
 ### v2.0.1
 Updated Node Settings, Resolved Display Issues, Fixed Several Node structures. 
