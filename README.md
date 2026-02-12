@@ -25,7 +25,7 @@ pip install -r requirements.txt
 
 ---
 
-## Nodes (30 Total)
+## Nodes (31 Total)
 
 ### Color Adjustment
 
@@ -90,10 +90,11 @@ pip install -r requirements.txt
 | **Text String** | Simple text input node for passing strings to other nodes |
 | **Show Text** | Display and pass through text output from other nodes for debugging |
 | **Show Value** | Display any value type (float, int, string, bool) in the node for debugging |
-| **Mega Slider X1** | Single universal slider with per-slider property overrides |
-| **Mega Slider X3** | 3 universal sliders with per-slider property overrides |
-| **Mega Slider X6** | 6 universal sliders with per-slider property overrides |
-| **Mega Slider X12** | 12 universal sliders with per-slider property overrides |
+| **Mega Slider Master Value** | Master settings (min/max/step) for connected Mega Sliders |
+| **Mega Slider X1** | Single universal slider with optional master input and per-slider property overrides |
+| **Mega Slider X3** | 3 universal sliders with optional master input and per-slider property overrides |
+| **Mega Slider X6** | 6 universal sliders with optional master input and per-slider property overrides |
+| **Mega Slider X12** | 12 universal sliders with optional master input and per-slider property overrides |
 | **Dynamic Value Range** | Automatically cycles through a value range on each run (increment/decrement/random) |
 
 (example)
@@ -171,9 +172,16 @@ pip install -r requirements.txt
 - Display any value type (float, int, string, bool) in the node
 - Accepts any input type for universal debugging
 
+### Mega Slider Master Value
+- Set min/max/step values in one place
+- Connect to any Mega Slider node to control all its sliders
+- One master can connect to multiple slider nodes
+- Slider UI updates in real-time when master values change
+
 ### Mega Slider X1 / X3 / X6 / X12
 - 1, 3, 6, or 12 universal sliders with individual outputs
-- **Per-slider settings:** Right-click node → Properties to set individual `slider_N_min`, `slider_N_max`, `slider_N_step`
+- Optional **master** input: connect Mega Slider Master Value to apply min/max/step to all sliders
+- **Per-slider overrides:** Right-click node → Properties to set individual `slider_N_min`, `slider_N_max`, `slider_N_step`
 - Output as float or integer (toggle)
 - Sliders snap to step increments when properties are set
 
@@ -189,8 +197,9 @@ pip install -r requirements.txt
 ## Changelog
 
 ### v2.0.3
-- **New Nodes:** Show Value, Mega Slider X1/X3/X6/X12, Dynamic Value Range
-- **Mega Sliders:** Universal slider banks with per-slider settings via right-click → Properties
+- **New Nodes:** Show Value, Mega Slider Master Value, Mega Slider X1/X3/X6/X12, Dynamic Value Range
+- **Mega Slider Master Value:** Set min/max/step for connected Mega Sliders
+- **Mega Sliders:** Universal slider banks with optional master input and per-slider settings via right-click → Properties
 - **Dynamic Value Range:** Auto-cycling values for batch diversity (increment/decrement/random modes)
 - **Show Value:** Display any value type in-node for debugging
 
