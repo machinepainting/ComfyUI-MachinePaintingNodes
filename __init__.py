@@ -1,7 +1,7 @@
 # __init__.py
 
 """
-ComfyUI-MachinePaintingNodes v2.0.2
+ComfyUI-MachinePaintingNodes v2.0.3
 Professional color grading, mask tools, and utilities for ComfyUI
 """
 
@@ -25,6 +25,9 @@ from .seed_lock import SeedLock
 from .text_notes import TextNotes
 from .show_text import ShowText
 from .text_string import TextString
+from .show_value import ShowValue
+from .mega_slider import MegaSliderX1, MegaSliderX3, MegaSliderX6, MegaSliderX12
+from .dynamic_value_range import DynamicValueRange
 
 NODE_CLASS_MAPPINGS = {
     # Color Adjustment
@@ -56,6 +59,12 @@ NODE_CLASS_MAPPINGS = {
     "TextNotes": TextNotes,
     "ShowText": ShowText,
     "TextString": TextString,
+    "ShowValue": ShowValue,
+    "MegaSliderX1": MegaSliderX1,
+    "MegaSliderX3": MegaSliderX3,
+    "MegaSliderX6": MegaSliderX6,
+    "MegaSliderX12": MegaSliderX12,
+    "DynamicValueRange": DynamicValueRange,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -88,9 +97,15 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "TextNotes": "👾 Text Notes",
     "ShowText": "👾 Show Text",
     "TextString": "👾 Text String",
+    "ShowValue": "👾 Show Value",
+    "MegaSliderX1": "👾 Mega Slider X1",
+    "MegaSliderX3": "👾 Mega Slider X3",
+    "MegaSliderX6": "👾 Mega Slider X6",
+    "MegaSliderX12": "👾 Mega Slider X12",
+    "DynamicValueRange": "👾 Dynamic Value Range",
 }
 
 WEB_DIRECTORY = "./js"
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
 
-print("ComfyUI-MachinePaintingNodes v2.0.2: Loaded 24 nodes")
+print("ComfyUI-MachinePaintingNodes v2.0.3: Loaded 30 nodes")
