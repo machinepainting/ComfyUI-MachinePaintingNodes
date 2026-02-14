@@ -28,6 +28,7 @@ from .text_string import TextString
 from .show_value import ShowValue
 from .mega_slider import MegaSliderMasterValue, MegaSliderX1, MegaSliderX3, MegaSliderX6, MegaSliderX12
 from .dynamic_value_range import DynamicValueRange
+from .zimage_latent import ZImageEmptyLatentImage
 
 NODE_CLASS_MAPPINGS = {
     # Color Adjustment
@@ -66,6 +67,7 @@ NODE_CLASS_MAPPINGS = {
     "MegaSliderX6": MegaSliderX6,
     "MegaSliderX12": MegaSliderX12,
     "DynamicValueRange": DynamicValueRange,
+    "ZImageEmptyLatentImage": ZImageEmptyLatentImage,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -105,9 +107,10 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "MegaSliderX6": "👾 Mega Slider X6",
     "MegaSliderX12": "👾 Mega Slider X12",
     "DynamicValueRange": "👾 Dynamic Value Range",
+    "ZImageEmptyLatentImage": "👾 Z-Image Empty Latent Image",
 }
 
 WEB_DIRECTORY = "./js"
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
 
-print("ComfyUI-MachinePaintingNodes v2.0.3: Loaded 31 nodes")
+print("ComfyUI-MachinePaintingNodes v2.0.3: Loaded 32 nodes")
