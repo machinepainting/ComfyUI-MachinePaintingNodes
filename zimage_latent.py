@@ -1,4 +1,4 @@
-from nodes import EmptyLatentImage
+import torch
 
 
 class ZImageEmptyLatentImage:
@@ -56,7 +56,6 @@ class ZImageEmptyLatentImage:
         result = [x.strip() for x in dimensions.split('x')]
         width = int(result[0])
         height = int(result[1].split(' ')[0].strip())
-        
-        latent = EmptyLatentImage().generate(width, height, batch_size)[0]
-        
-        return (latent, width, height)
+
+        latent = torch.zeros([batch_size, 4, height // 8, width // 8])
+        return ({"samples": latent}, width, height)

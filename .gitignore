@@ -42,3 +42,6 @@ ComfyUI/logs/
 
 # But keep preview folder in repo (for docs)
 !preview/
+
+# old backed up project archived files to ignore
+_old/
