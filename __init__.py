@@ -1,7 +1,7 @@
 # __init__.py
 
 """
-ComfyUI-MachinePaintingNodes v2.0.3
+ComfyUI-MachinePaintingNodes v2.0.5
 Professional color grading, mask tools, and utilities for ComfyUI
 """
 
@@ -113,4 +113,4 @@ NODE_DISPLAY_NAME_MAPPINGS = {
 WEB_DIRECTORY = "./js"
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
 
-print("ComfyUI-MachinePaintingNodes v2.0.3: Loaded 32 nodes")
+print("ComfyUI-MachinePaintingNodes v2.0.5: Loaded 33 nodes")
