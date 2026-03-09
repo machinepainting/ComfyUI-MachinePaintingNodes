@@ -25,7 +25,7 @@ pip install -r requirements.txt
 
 ---
 
-## Nodes (31 Total)
+## Nodes (32 Total)
 
 ### Color Adjustment
 
@@ -96,6 +96,7 @@ pip install -r requirements.txt
 | **Mega Slider X6** | 6 universal sliders with optional master input and per-slider property overrides |
 | **Mega Slider X12** | 12 universal sliders with optional master input and per-slider property overrides |
 | **Dynamic Value Range** | Automatically cycles through a value range on each run (increment/decrement/random) |
+| **Z-Image Empty Latent Image** | Empty latent image with Z-Image optimized resolutions from 512x512 to 2048x2048 (landscape, portrait, square) |
 
 (example)
 ![machinePainting Nodes Display](images/boolean_display.jpg)
@@ -192,9 +193,22 @@ pip install -r requirements.txt
 - Outputs: FLOAT, INT, and STRING versions
 - Perfect for creating diversity across batch generations
 
+### Z-Image Empty Latent Image
+- Pre-configured resolutions optimized for Z-Image model
+- Landscape, portrait, and square options from 512x512 to 2048x2048
+- Outputs LATENT, WIDTH, and HEIGHT for flexible workflow connections
+- Configurable batch size
+
 ---
 
 ## Changelog
+
+### v2.0.5
+- **Fix:** Updated pyproject.toml version to match release
+- **Fix:** Corrected node count
+
+### v2.0.4
+- **New Node:** Z-Image Empty Latent Image with optimized resolutions for Z-Image model
 
 ### v2.0.3
 - **New Nodes:** Show Value, Mega Slider Master Value, Mega Slider X1/X3/X6/X12, Dynamic Value Range
