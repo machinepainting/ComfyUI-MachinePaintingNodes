@@ -1,6 +1,6 @@
 [project]
 name = "comfyui-machinepainting-nodes"
-description = "Professional color grading, mask tools, and utilities for ComfyUI. Includes Curves, Levels, LUT Apply, Selective Color, Channel Masks, Background Removal, Boolean utilities, and more."
+description = "Professional photo editing tools for ComfyUI. Features Photoshop-style curves, levels, and color adjustments, AI-powered masking / background removal, LUT color grading, advanced channel masking, color management, and advanced workflow utility tools. Built to help you take your AI-generated images to the next level."
 version = "2.0.6"
 license = { file = "LICENSE" }
 dependencies = ["opencv-python", "numpy", "rembg"]
