@@ -22,6 +22,10 @@ coverage.xml
 .mypy_cache/
 .dmypy.json
 
+# AI Agents
+.claude/
+.codex/
+
 # IDE
 .idea/
 .vscode/

@@ -1,8 +1,23 @@
 # ComfyUI-MachinePaintingNodes
 
-**Professional Image Editing & Adjustments, Curves, color grading, mask tools, and advanced utilities for your ComfyUI workflows**
+**Professional Image Editing & Adjustments, Curves, color grading, mask tools, filters, and advanced utilities for your ComfyUI workflows**
 
-A comprehensive node suite for professional level image processing, color correction, and advanced workflow enhancement utilities. 
+A comprehensive node suite for professional level image processing, color correction, frequency separation, film grain, blur tools, inpainting mask management, and advanced workflow enhancement utilities.
+
+---
+
+### New Nodes
+
+| Node | Category | Date Added |
+|------|----------|------------|
+| **Blur Pro** | Filters | 2026-03-27 |
+| **Noise Grain Pro** | Filters | 2026-03-27 |
+| **Frequency Separate** | Filters | 2026-03-27 |
+| **Frequency Combine** | Filters | 2026-03-27 |
+| **Inpaint Mask Pro** | Mask | 2026-03-27 |
+| **Image <> Mask Switch** | Utilities | 2026-03-27 |
+
+---
 
 (All current nodes.)
 ![machinePainting Nodes Overview](images/MachinePaintingNodes_display.jpg)
@@ -25,7 +40,7 @@ pip install -r requirements.txt
 
 ---
 
-## Nodes (32 Total)
+## Nodes (38 Total)
 
 ### Color Adjustment
 
@@ -47,6 +62,15 @@ pip install -r requirements.txt
 ![machinePainting Nodes Display](images/color_match_blend_display.jpg)
 ![machinePainting Nodes Display](images/color_adjust_blend_display.jpg)
 
+### Filters
+
+| Node | Description |
+|------|-------------|
+| **Blur Pro** | Professional multi-type blur with 5 modes: Gaussian, Surface (bilateral/edge-preserving), Box, Median, and Motion blur. Per-type dynamic sliders, mask-controlled application, strength blending, optional mask blurring, in-node preview. Large radius optimization for fast processing at high values. |
+| **Noise Grain Pro** | Realistic film grain/noise generator with grain size, sharpness, color/mono toggle, saturation control, seed for reproducibility. 6 blend modes: overlay, soft light, hard light, linear light, multiply, screen. Mask support and in-node preview. |
+| **Frequency Separate** | Splits an image into high frequency (texture/detail) and low frequency (color/tone) layers for professional retouching workflows. Two modes: subtract (Photoshop Linear Light style) and divide. Original image pass-through output for easy chaining. |
+| **Frequency Combine** | Recombines edited high and low frequency layers back into a final image. Supports subtract and divide modes to match the separation method used. |
+
 ### Mask and Background
 
 | Node | Description |
@@ -55,6 +79,7 @@ pip install -r requirements.txt
 | **Mask Editor** | Stand alone Mask Tools. Refine masks with grow/shrink/blur/fill |
 | **Apply Mask** | Composite image with mask and background options |
 | **Channel Mask Pro** | Extract R/G/B/A channels as separate masks with levels/contrast adjustments and input mask support for advanced Channel Masking |
+| **Inpaint Mask Pro** | Advanced inpaint mask management node. Combines an inpaint mask with an optional silhouette mask and/or SEGS input to crop sloppy inpaint regions to clean boundaries. Features: invert toggle, per-mask blur, mask expand/contract, SEGS support (union/largest), multi-color overlay preview with independent color and opacity per layer (inpaint mask, crop mask, SEGS mask). Outputs: image pass-through, processed mask, B&W mask image, and preview image. |
 
 (examples)
 ![machinePainting Nodes Display](images/remove_background_pro_selective_color_pro_display.jpg)
@@ -70,7 +95,7 @@ pip install -r requirements.txt
 
 | Node | Description |
 |------|-------------|
-| **Histogram View** | Display RGB/luminance histogram in-node for advanced image setting color display|
+| **Histogram View** | Display RGB/luminance histogram in-node for advanced image setting color display |
 | **Color Wheel View** | Display vectorscope color distribution in-node for advanced image setting color display |
 
 (example)
@@ -80,12 +105,13 @@ pip install -r requirements.txt
 
 | Node | Description |
 |------|-------------|
+| **Image <> Mask Switch** | Convert between IMAGE and MASK types with a toggle. Image-to-mask converts to grayscale using Rec. 601 luma. Mask-to-image expands to 3-channel RGB. |
 | **Boolean** | Output a true/false value |
-| **Boolean Invert** | Flip boolean value (true to false, false to true) for advanced workflow pipline and settings switching |
-| **Boolean Switch Value Output** | Output different values based on boolean for advanced workflow pipline and settings switching |
-| **Boolean Input Value Switch** | Route inputs based on boolean for advanced workflow pipline and settings switching |
+| **Boolean Invert** | Flip boolean value (true to false, false to true) for advanced workflow pipeline and settings switching |
+| **Boolean Switch Value Output** | Output different values based on boolean for advanced workflow pipeline and settings switching |
+| **Boolean Input Value Switch** | Route inputs based on boolean for advanced workflow pipeline and settings switching |
 | **Boolean Master Switch** | Control multiple booleans from one switch for controlling multiple switches with one master switch node |
-| **Seed Lock** | Lock/unlock seed values with a toggle to lock the current seed vaule, opposed to the standard where the following run seed value is locked |
+| **Seed Lock** | Lock/unlock seed values with a toggle to lock the current seed value, opposed to the standard where the following run seed value is locked |
 | **Text Notes** | Add comments and documentation to your workflow for organization |
 | **Text String** | Simple text input node for passing strings to other nodes |
 | **Show Text** | Display and pass through text output from other nodes for debugging |
@@ -104,6 +130,58 @@ pip install -r requirements.txt
 ---
 
 ## Features
+
+### Blur Pro
+- 5 blur types in one node with dynamic slider UI that shows only relevant controls per type
+- **Gaussian** — General-purpose smoothing (radius)
+- **Surface Blur** — Edge-preserving bilateral filter for retouching (radius + threshold). Smooths skin/textures while keeping edges sharp.
+- **Box Blur** — Fast stackable blur with iterations for smooth falloff (radius + iterations)
+- **Median** — Edge-preserving noise removal, kills salt-and-pepper artifacts (radius)
+- **Motion Blur** — Directional blur for movement effects (angle + distance)
+- Large radius optimization: radii above 30 auto-downscale for fast processing
+- Mask input controls where blur is applied, optional mask blurring toggle
+- Strength slider to blend blurred result with original
+- In-node preview
+
+### Noise Grain Pro
+- Realistic film grain with independent controls for size, sharpness, and color
+- **Grain size** (0.5-10) — Controls particle size by generating noise at reduced resolution
+- **Sharpness** (0-1) — Grain definition from soft/diffused to crisp
+- **Monochromatic** toggle — Mono grain vs color grain
+- **Saturation** — Color intensity for color grain mode
+- 6 industry-standard blend modes: overlay, soft light, hard light, linear light, multiply, screen
+- Soft Light uses the correct W3C/Photoshop formula
+- Seed input for reproducible grain
+- Mask support for selective application
+- In-node preview
+
+### Frequency Separation
+- Professional retouching workflow: split image into texture and color/tone layers
+- **Frequency Separate** — Takes original image + a blurred version (from Blur Pro or any blur node), outputs high frequency (detail), low frequency (pass-through), and original (pass-through)
+- **Frequency Combine** — Recombines edited layers back into a final image
+- Two modes: **subtract** (Photoshop Linear Light style) and **divide** (fewer artifacts in dark regions)
+- Epsilon control for divide mode safety
+- Filter-agnostic: use any blur node upstream (Gaussian for standard, Surface Blur for edge-aware retouching)
+
+### Inpaint Mask Pro
+- Solves the problem of applying external inpaint masks when the Load Image node doesn't accept mask inputs
+- Combines an inpaint mask with a clean silhouette mask to crop sloppy inpaint regions
+- **Invert toggle** for flipping the inpaint mask
+- **Inpaint blur** for softening inpaint mask edges
+- **Mask crop** with blur and expand/contract controls for the silhouette mask
+- **SEGS support** from Impact Pack segmentation models (union or largest segment)
+- **Multi-color overlay preview** with independent toggle, color, and opacity per layer:
+  - Inpaint mask: red, light blue, black, white
+  - Crop mask: lime green, purple, black, white
+  - SEGS mask: yellow, orange, black, white
+- Dynamic JS UI: settings for each feature only appear when toggled on
+- Outputs: image pass-through, processed mask, B&W mask image, colored preview image
+
+### Image <> Mask Switch
+- Toggle between image-to-mask and mask-to-image conversion
+- Image-to-mask: converts RGB to grayscale using Rec. 601 luma coefficients (0.299R + 0.587G + 0.114B)
+- Mask-to-image: expands single-channel mask to 3-channel RGB
+- Both outputs always populated for stable downstream connections
 
 ### Curves Adjust Pro
 - Interactive curve editor with click-to-add, drag-to-move, shift-click-to-remove points
@@ -203,6 +281,15 @@ pip install -r requirements.txt
 
 ## Changelog
 
+### v2.1.0
+- **New Node:** Blur Pro — 5 blur types (Gaussian, Surface, Box, Median, Motion) with dynamic UI, mask support, strength blending, large radius optimization, in-node preview
+- **New Node:** Noise Grain Pro — Film grain generator with size, sharpness, color/mono, saturation, 6 blend modes, seed, mask support
+- **New Node:** Frequency Separate — Split image into high/low frequency layers for professional retouching
+- **New Node:** Frequency Combine — Recombine frequency layers with subtract/divide modes
+- **New Node:** Inpaint Mask Pro — Advanced inpaint mask management with mask cropping, SEGS support, multi-color overlay preview
+- **New Node:** Image <> Mask Switch — Toggle conversion between IMAGE and MASK types
+- **New Category:** Filters (Blur Pro, Noise Grain Pro, Frequency Separate/Combine)
+
 ### v2.0.5
 - **Fix:** Updated pyproject.toml version to match release
 - **Fix:** Corrected node count
@@ -222,7 +309,7 @@ pip install -r requirements.txt
 - **Organized Categories:** Nodes now grouped into subcategories (Color, Mask, Blend, Analysis, Util)
 
 ### v2.0.1
-Updated Node Settings, Resolved Display Issues, Fixed Several Node structures. 
+Updated Node Settings, Resolved Display Issues, Fixed Several Node structures.
 
 ### v2.0.0
 Major Overhaul, Node Additions, and Improvements
@@ -247,7 +334,7 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 ---
 
-## Want to Auto Send your ComfyUI files from output folder to your Google Drive or Dropbox Account? 
+## Want to Auto Send your ComfyUI files from output folder to your Google Drive or Dropbox Account?
 
 Check out these new Nodes to advance your Ai workflows. Super helpful tools to protect your creations and streamline your process. DriveSend and DropSend node with optional file Encryption.
 
@@ -258,4 +345,4 @@ Check out these new Nodes to advance your Ai workflows. Super helpful tools to p
 
 ## Tags
 
-`comfyui` `comfyui-nodes` `custom-nodes` `color-grading` `color-correction` `curves` `levels` `lut` `lookup-table` `photoshop` `image-processing` `image-editing` `background-removal` `rembg` `masking` `mask-editor` `channel-mixer` `histogram` `vectorscope` `blend-modes` `compositing` `stable-diffusion` `ai-art` `generative-art` `film-emulation` `cinematic` `color-matching` `hsl` `cmyk` `selective-color` `boolean-logic` `workflow` `utilities` `sliders` `dynamic-values`
+`comfyui` `comfyui-nodes` `custom-nodes` `color-grading` `color-correction` `curves` `levels` `lut` `lookup-table` `photoshop` `image-processing` `image-editing` `background-removal` `rembg` `masking` `mask-editor` `channel-mixer` `histogram` `vectorscope` `blend-modes` `compositing` `stable-diffusion` `ai-art` `generative-art` `film-emulation` `cinematic` `color-matching` `hsl` `cmyk` `selective-color` `boolean-logic` `workflow` `utilities` `sliders` `dynamic-values` `blur` `gaussian-blur` `surface-blur` `motion-blur` `bilateral-filter` `film-grain` `noise` `frequency-separation` `retouching` `inpainting` `segs`

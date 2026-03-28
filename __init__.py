@@ -1,8 +1,8 @@
 # __init__.py
 
 """
-ComfyUI-MachinePaintingNodes v2.0.6
-Professional color grading, mask tools, and utilities for ComfyUI
+ComfyUI-MachinePaintingNodes v2.1.0
+Professional color grading, mask tools, filters, and utilities for ComfyUI
 """
 
 # Combined files
@@ -29,6 +29,11 @@ from .show_value import ShowValue
 from .mega_slider import MegaSliderMasterValue, MegaSliderX1, MegaSliderX3, MegaSliderX6, MegaSliderX12
 from .dynamic_value_range import DynamicValueRange
 from .zimage_latent import ZImageEmptyLatentImage
+from .blur_pro import BlurPro
+from .image_mask_switch import ImageMaskSwitch
+from .frequency_separation import FrequencySeparate, FrequencyCombine
+from .noise_grain_pro import NoiseGrainPro
+from .inpaint_mask_pro import InpaintMaskPro
 
 NODE_CLASS_MAPPINGS = {
     # Color Adjustment
@@ -68,6 +73,16 @@ NODE_CLASS_MAPPINGS = {
     "MegaSliderX12": MegaSliderX12,
     "DynamicValueRange": DynamicValueRange,
     "ZImageEmptyLatentImage": ZImageEmptyLatentImage,
+    # Filters
+    "BlurPro": BlurPro,
+    # Utilities (continued)
+    "MP_ImageMaskSwitch": ImageMaskSwitch,
+    # Frequency Separation
+    "FrequencySeparate": FrequencySeparate,
+    "FrequencyCombine": FrequencyCombine,
+    "NoiseGrainPro": NoiseGrainPro,
+    # Inpainting
+    "InpaintMaskPro": InpaintMaskPro,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -108,9 +123,19 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "MegaSliderX12": "👾 Mega Slider X12",
     "DynamicValueRange": "👾 Dynamic Value Range",
     "ZImageEmptyLatentImage": "👾 Z-Image Empty Latent Image",
+    # Filters
+    "BlurPro": "👾 Blur Pro",
+    # Utilities (continued)
+    "MP_ImageMaskSwitch": "👾 Image <> Mask Switch",
+    # Frequency Separation
+    "FrequencySeparate": "👾 Frequency Separate",
+    "FrequencyCombine": "👾 Frequency Combine",
+    "NoiseGrainPro": "👾 Noise Grain Pro",
+    # Inpainting
+    "InpaintMaskPro": "👾 Inpaint Mask Pro",
 }
 
 WEB_DIRECTORY = "./js"
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
 
-print("ComfyUI-MachinePaintingNodes v2.0.6: Loaded 32 nodes")
+print("ComfyUI-MachinePaintingNodes v2.1.0: Loaded 38 nodes")
