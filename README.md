@@ -15,6 +15,8 @@ A comprehensive node suite for professional level image processing, color correc
 | **Frequency Separate** | Filters | 2026-03-27 |
 | **Frequency Combine** | Filters | 2026-03-27 |
 | **Inpaint Mask Pro** | Mask | 2026-03-27 |
+| **Mask Composite Pro 2X** | Mask | 2026-03-28 |
+| **Mask Composite Pro 6X** | Mask | 2026-03-28 |
 | **Image <> Mask Switch** | Utilities | 2026-03-27 |
 
 ---
@@ -40,7 +42,7 @@ pip install -r requirements.txt
 
 ---
 
-## Nodes (38 Total)
+## Nodes (40 Total)
 
 ### Color Adjustment
 
@@ -79,7 +81,9 @@ pip install -r requirements.txt
 | **Mask Editor** | Stand alone Mask Tools. Refine masks with grow/shrink/blur/fill |
 | **Apply Mask** | Composite image with mask and background options |
 | **Channel Mask Pro** | Extract R/G/B/A channels as separate masks with levels/contrast adjustments and input mask support for advanced Channel Masking |
-| **Inpaint Mask Pro** | Advanced inpaint mask management node. Combines an inpaint mask with an optional silhouette mask and/or SEGS input to crop sloppy inpaint regions to clean boundaries. Features: invert toggle, per-mask blur, mask expand/contract, SEGS support (union/largest), multi-color overlay preview with independent color and opacity per layer (inpaint mask, crop mask, SEGS mask). Outputs: image pass-through, processed mask, B&W mask image, and preview image. |
+| **Inpaint Mask Pro** | Advanced inpaint mask management node. Combines an inpaint mask with an optional silhouette mask to crop sloppy inpaint regions to clean boundaries. Features: invert toggle, expand/shrink, per-mask blur, mask expand/contract, multi-color overlay preview with independent color and opacity per layer. Outputs: image pass-through, processed mask, B&W mask image, and preview image. |
+| **Mask Composite Pro 2X** | Combine 2 masks with per-mask blur, grow/shrink, and opacity. Screen blend for natural mask union. Output selector and invert toggle. |
+| **Mask Composite Pro 6X** | Combine up to 6 masks with per-mask blur, grow/shrink, and opacity. Screen blend for natural mask union. Output selector (all or individual 1-6) and invert toggle. |
 
 (examples)
 ![machinePainting Nodes Display](images/remove_background_pro_selective_color_pro_display.jpg)
@@ -167,15 +171,22 @@ pip install -r requirements.txt
 - Solves the problem of applying external inpaint masks when the Load Image node doesn't accept mask inputs
 - Combines an inpaint mask with a clean silhouette mask to crop sloppy inpaint regions
 - **Invert toggle** for flipping the inpaint mask
+- **Expand/shrink slider** for growing or shrinking the inpaint mask
 - **Inpaint blur** for softening inpaint mask edges
-- **Mask crop** with blur and expand/contract controls for the silhouette mask
-- **SEGS support** from Impact Pack segmentation models (union or largest segment)
+- **Mask crop** (advanced) with blur and expand/contract controls for the silhouette mask
 - **Multi-color overlay preview** with independent toggle, color, and opacity per layer:
   - Inpaint mask: red, light blue, black, white
   - Crop mask: lime green, purple, black, white
-  - SEGS mask: yellow, orange, black, white
-- Dynamic JS UI: settings for each feature only appear when toggled on
 - Outputs: image pass-through, processed mask, B&W mask image, colored preview image
+
+### Mask Composite Pro 2X / 6X
+- Combine 2 or 6 masks into one unified mask
+- Per-mask controls: **blur**, **grow/shrink**, **opacity**
+- **Screen blend mode** for combining — creates natural mask unions where overlapping areas blend smoothly
+- **Output selector** — output all masks combined, or select an individual mask for isolation
+- **Invert output** toggle to flip the final result
+- Handles mismatched mask sizes automatically (resizes to match mask_1)
+- 2X variant for simple two-mask workflows, 6X for complex compositing
 
 ### Image <> Mask Switch
 - Toggle between image-to-mask and mask-to-image conversion
@@ -280,6 +291,12 @@ pip install -r requirements.txt
 ---
 
 ## Changelog
+
+### v2.1.1
+- **New Node:** Mask Composite Pro 2X — combine 2 masks with per-mask blur, grow/shrink, opacity, screen blend, output selector, invert toggle
+- **New Node:** Mask Composite Pro 6X — combine up to 6 masks with same features
+- **Update:** Inpaint Mask Pro — added inpaint expand/shrink slider, multi-color overlay with per-layer display settings, removed SEGS (simplified to image + mask inputs)
+- **Update:** Blur Pro — type-specific sliders marked as advanced for cleaner default view
 
 ### v2.1.0
 - **New Node:** Blur Pro — 5 blur types (Gaussian, Surface, Box, Median, Motion) with dynamic UI, mask support, strength blending, large radius optimization, in-node preview

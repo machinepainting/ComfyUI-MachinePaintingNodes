@@ -40,38 +40,42 @@ class BlurPro:
                     "display": "slider"
                 }),
 
-                # --- Surface Blur only ---
+                # --- Surface Blur only (advanced) ---
                 "threshold": ("FLOAT", {
                     "default": 30.0,
                     "min": 1.0,
                     "max": 255.0,
                     "step": 1.0,
-                    "display": "slider"
+                    "display": "slider",
+                    "advanced": True,
                 }),
 
-                # --- Motion Blur only ---
+                # --- Motion Blur only (advanced) ---
                 "angle": ("FLOAT", {
                     "default": 0.0,
                     "min": 0.0,
                     "max": 360.0,
                     "step": 1.0,
-                    "display": "slider"
+                    "display": "slider",
+                    "advanced": True,
                 }),
                 "distance": ("INT", {
                     "default": 20,
                     "min": 1,
                     "max": 200,
                     "step": 1,
-                    "display": "slider"
+                    "display": "slider",
+                    "advanced": True,
                 }),
 
-                # --- Box Blur only ---
+                # --- Box Blur only (advanced) ---
                 "iterations": ("INT", {
                     "default": 1,
                     "min": 1,
                     "max": 10,
                     "step": 1,
-                    "display": "slider"
+                    "display": "slider",
+                    "advanced": True,
                 }),
 
                 # --- Mask options ---
