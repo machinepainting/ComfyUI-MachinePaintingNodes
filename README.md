@@ -70,8 +70,8 @@ pip install -r requirements.txt
 |------|-------------|
 | **Blur Pro** | Professional multi-type blur with 5 modes: Gaussian, Surface (bilateral/edge-preserving), Box, Median, and Motion blur. Per-type dynamic sliders, mask-controlled application, strength blending, optional mask blurring, in-node preview. Large radius optimization for fast processing at high values. |
 | **Noise Grain Pro** | Realistic film grain/noise generator with grain size, sharpness, color/mono toggle, saturation control, seed for reproducibility. 6 blend modes: overlay, soft light, hard light, linear light, multiply, screen. Mask support and in-node preview. |
-| **Frequency Separate** | Splits an image into high frequency (texture/detail) and low frequency (color/tone) layers for professional retouching workflows. Two modes: subtract (Photoshop Linear Light style) and divide. Original image pass-through output for easy chaining. |
-| **Frequency Combine** | Recombines edited high and low frequency layers back into a final image. Supports subtract and divide modes to match the separation method used. |
+| **Frequency Separate** | Splits an image into high frequency (texture/detail) and low frequency (color/tone) layers using the exact Photoshop Apply Image formula (Scale 2, Offset 128, Subtract). Original image pass-through output for easy chaining. |
+| **Frequency Combine** | Recombines high and low frequency layers using Linear Light blend with opacity control. |
 
 ### Mask and Background
 
@@ -139,9 +139,9 @@ pip install -r requirements.txt
 - 5 blur types in one node with dynamic slider UI that shows only relevant controls per type
 - **Gaussian** — General-purpose smoothing (radius)
 - **Surface Blur** — Edge-preserving bilateral filter for retouching (radius + threshold). Smooths skin/textures while keeping edges sharp.
-- **Box Blur** — Fast stackable blur with iterations for smooth falloff (radius + iterations)
+- **Box Blur** — Fast uniform blur (radius)
 - **Median** — Edge-preserving noise removal, kills salt-and-pepper artifacts (radius)
-- **Motion Blur** — Directional blur for movement effects (angle + distance)
+- **Motion Blur** — Directional blur for movement effects (angle + radius)
 - Large radius optimization: radii above 30 auto-downscale for fast processing
 - Mask input controls where blur is applied, optional mask blurring toggle
 - Strength slider to blend blurred result with original
@@ -161,10 +161,10 @@ pip install -r requirements.txt
 
 ### Frequency Separation
 - Professional retouching workflow: split image into texture and color/tone layers
-- **Frequency Separate** — Takes original image + a blurred version (from Blur Pro or any blur node), outputs high frequency (detail), low frequency (pass-through), and original (pass-through)
-- **Frequency Combine** — Recombines edited layers back into a final image
-- Two modes: **subtract** (Photoshop Linear Light style) and **divide** (fewer artifacts in dark regions)
-- Epsilon control for divide mode safety
+- **Frequency Separate** — Takes original image + a blurred version (from Blur Pro or any blur node), outputs high frequency (neutral gray texture), low frequency (pass-through), and original (pass-through)
+- Uses the exact Photoshop Apply Image formula: Scale 2, Offset 128, Subtract
+- **Frequency Combine** — Recombines layers using Linear Light blend with opacity slider
+- Opacity controls texture strength: 0 = smooth only, 1 = full reconstruction
 - Filter-agnostic: use any blur node upstream (Gaussian for standard, Surface Blur for edge-aware retouching)
 
 ### Inpaint Mask Pro
@@ -308,8 +308,8 @@ pip install -r requirements.txt
 - **New Node:** Blur Pro — 5 blur types (Gaussian, Surface, Box, Median, Motion) with dynamic UI, mask support, strength blending, large radius optimization, in-node preview
 - **New Node:** Noise Grain Pro — Film grain generator with size, sharpness, color/mono, saturation, 6 blend modes, seed, mask support
 - **New Node:** Frequency Separate — Split image into high/low frequency layers for professional retouching
-- **New Node:** Frequency Combine — Recombine frequency layers with subtract/divide modes
-- **New Node:** Inpaint Mask Pro — Advanced inpaint mask management with mask cropping, SEGS support, multi-color overlay preview
+- **New Node:** Frequency Combine — Recombine frequency layers with Linear Light blend
+- **New Node:** Inpaint Mask Pro — Advanced inpaint mask management with mask cropping, multi-color overlay preview
 - **New Node:** Image <> Mask Switch — Toggle conversion between IMAGE and MASK types
 - **New Category:** Filters (Blur Pro, Noise Grain Pro, Frequency Separate/Combine)
 
