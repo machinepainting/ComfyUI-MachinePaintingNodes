@@ -59,25 +59,6 @@ class BlurPro:
                     "display": "slider",
                     "advanced": True,
                 }),
-                "distance": ("INT", {
-                    "default": 20,
-                    "min": 1,
-                    "max": 200,
-                    "step": 1,
-                    "display": "slider",
-                    "advanced": True,
-                }),
-
-                # --- Box Blur only (advanced) ---
-                "iterations": ("INT", {
-                    "default": 1,
-                    "min": 1,
-                    "max": 10,
-                    "step": 1,
-                    "display": "slider",
-                    "advanced": True,
-                }),
-
                 # --- Mask options ---
                 "mask": ("MASK",),
                 "invert_mask": ("BOOLEAN", {"default": False}),
@@ -96,7 +77,7 @@ class BlurPro:
 
     def apply_blur(self, image, blur_type,
                    strength=1.0, radius=5.0, threshold=30.0,
-                   angle=0.0, distance=20, iterations=1,
+                   angle=0.0,
                    mask=None, invert_mask=False, blur_mask=False,
                    unique_id=None):
 
@@ -109,11 +90,11 @@ class BlurPro:
         elif blur_type == "surface":
             blurred = self._surface_blur(img, radius, threshold)
         elif blur_type == "box":
-            blurred = self._box_blur(img, radius, iterations)
+            blurred = self._box_blur(img, radius)
         elif blur_type == "median":
             blurred = self._median_blur(img, radius)
         elif blur_type == "motion":
-            blurred = self._motion_blur(img, angle, distance)
+            blurred = self._motion_blur(img, angle, radius)
         else:
             blurred = img.copy()
 
@@ -150,11 +131,11 @@ class BlurPro:
                 elif blur_type == "surface":
                     out_mask = self._surface_blur_single(out_mask, radius, threshold)
                 elif blur_type == "box":
-                    out_mask = self._box_blur_single(out_mask, radius, iterations)
+                    out_mask = self._box_blur_single(out_mask, radius)
                 elif blur_type == "median":
                     out_mask = self._median_blur_single(out_mask, radius)
                 elif blur_type == "motion":
-                    out_mask = self._motion_blur_single(out_mask, angle, distance)
+                    out_mask = self._motion_blur_single(out_mask, angle, radius)
         else:
             out_mask = np.ones((h, w), dtype=np.float32)
 
@@ -219,11 +200,8 @@ class BlurPro:
         ksize = max(int(radius * 2) | 1, 3)
         return cv2.blur(img, (ksize, ksize))
 
-    def _box_blur(self, img, radius, iterations):
-        result = img.copy()
-        for _ in range(iterations):
-            result = self._optimized_blur(result, self._box_blur_core, radius)
-        return result
+    def _box_blur(self, img, radius):
+        return self._optimized_blur(img, self._box_blur_core, radius)
 
     def _median_blur_core(self, img, radius):
         ksize = max(int(radius * 2) | 1, 3)
@@ -266,11 +244,8 @@ class BlurPro:
     def _surface_blur_single(self, mask, radius, threshold):
         return self._optimized_blur(mask, self._surface_blur_core, radius, threshold)
 
-    def _box_blur_single(self, mask, radius, iterations):
-        result = mask.copy()
-        for _ in range(iterations):
-            result = self._optimized_blur(result, self._box_blur_core, radius)
-        return result
+    def _box_blur_single(self, mask, radius):
+        return self._optimized_blur(mask, self._box_blur_core, radius)
 
     def _median_blur_single(self, mask, radius):
         return self._optimized_blur(mask, self._median_blur_core, radius)

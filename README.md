@@ -292,6 +292,12 @@ pip install -r requirements.txt
 
 ## Changelog
 
+### v2.1.2
+- **Fix:** Frequency Separate — locked to correct Photoshop formula (Scale 2, Offset 128, Subtract), removed mode/epsilon options
+- **Fix:** Frequency Combine — locked to Linear Light blend, added opacity slider, removed mode/epsilon options
+- **Update:** Blur Pro — removed distance and iterations parameters, motion blur uses radius, box blur single pass
+- **Update:** Inpaint Mask Pro — removed SEGS support (simplified), inpaint_mask now required
+
 ### v2.1.1
 - **New Node:** Mask Composite Pro 2X — combine 2 masks with per-mask blur, grow/shrink, opacity, screen blend, output selector, invert toggle
 - **New Node:** Mask Composite Pro 6X — combine up to 6 masks with same features

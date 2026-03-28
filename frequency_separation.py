@@ -4,15 +4,12 @@ import numpy as np
 
 class FrequencySeparate:
     """
-    Splits an image into high and low frequency layers.
+    Splits an image into high and low frequency layers using the Photoshop
+    Apply Image method: Scale 2, Offset 128, Subtract.
+
     Feed the original image and a blurred version (from Blur Pro or any blur node).
-    The high frequency layer contains texture/detail, the low frequency is passed through.
-
-    Subtract mode: Photoshop-style Linear Light separation.
-    Divide mode: Fewer artifacts in dark regions, uses epsilon for safety.
+    The high frequency output is a neutral gray layer containing texture/detail only.
     """
-
-    MODES = ["subtract", "divide"]
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -20,17 +17,7 @@ class FrequencySeparate:
             "required": {
                 "original": ("IMAGE",),
                 "low_frequency": ("IMAGE",),
-                "mode": (cls.MODES, {"default": "subtract"}),
             },
-            "optional": {
-                "epsilon": ("FLOAT", {
-                    "default": 0.1,
-                    "min": 0.001,
-                    "max": 0.99,
-                    "step": 0.01,
-                    "display": "slider"
-                }),
-            }
         }
 
     RETURN_TYPES = ("IMAGE", "IMAGE", "IMAGE")
@@ -38,16 +25,13 @@ class FrequencySeparate:
     FUNCTION = "separate"
     CATEGORY = "MachinePaintingNodes/Filter"
 
-    def separate(self, original, low_frequency, mode, epsilon=0.1):
+    def separate(self, original, low_frequency):
         orig = original.detach().clone()
         low = low_frequency.detach().clone()
 
-        if mode == "subtract":
-            # Photoshop Linear Light style: center at 0.5 (mid-gray = no detail)
-            high = orig - low + 0.5
-        else:
-            # Divide mode: ratio-based, epsilon prevents division by zero
-            high = ((orig + epsilon) / (low + epsilon)) * 0.5
+        # Photoshop Apply Image: Scale 2, Offset 128, Subtract
+        # high = (original - low) / 2 + 0.5
+        high = (orig - low) / 2.0 + 0.5
 
         high = torch.clamp(high, 0.0, 1.0)
 
@@ -56,14 +40,13 @@ class FrequencySeparate:
 
 class FrequencyCombine:
     """
-    Recombines high and low frequency layers back into a final image.
-    Use the same mode that was used for separation.
+    Recombines high and low frequency layers using Linear Light blend.
 
-    Subtract mode: result = low + high - 0.5
-    Divide mode: result = (high * 2) * (low + eps) - eps
+    result = low + 2 * (high - 0.5)
+
+    Opacity controls how much texture (high frequency) is applied.
+    At 0: just the low frequency (smooth). At 1: full reconstruction.
     """
-
-    MODES = ["subtract", "divide"]
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -71,13 +54,12 @@ class FrequencyCombine:
             "required": {
                 "high_frequency": ("IMAGE",),
                 "low_frequency": ("IMAGE",),
-                "mode": (cls.MODES, {"default": "subtract"}),
             },
             "optional": {
-                "epsilon": ("FLOAT", {
-                    "default": 0.1,
-                    "min": 0.001,
-                    "max": 0.99,
+                "opacity": ("FLOAT", {
+                    "default": 1.0,
+                    "min": 0.0,
+                    "max": 1.0,
                     "step": 0.01,
                     "display": "slider"
                 }),
@@ -89,13 +71,12 @@ class FrequencyCombine:
     FUNCTION = "combine"
     CATEGORY = "MachinePaintingNodes/Filter"
 
-    def combine(self, high_frequency, low_frequency, mode, epsilon=0.1):
+    def combine(self, high_frequency, low_frequency, opacity=1.0):
         low = low_frequency.detach().clone()
 
-        if mode == "subtract":
-            result = low + high_frequency - 0.5
-        else:
-            result = (high_frequency * 2.0) * (low + epsilon) - epsilon
+        # Linear Light: result = low + 2 * (high - 0.5)
+        # With opacity: result = low + 2 * (high - 0.5) * opacity
+        result = low + 2.0 * (high_frequency - 0.5) * opacity
 
         result = torch.clamp(result, 0.0, 1.0)
 
