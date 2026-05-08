@@ -25,6 +25,18 @@ coverage.xml
 # AI Agents
 .claude/
 .codex/
+.cursor/
+.cursorrules
+.aider*
+.continue/
+.windsurf/
+.claude.json
+CLAUDE.md
+CLAUDE.local.md
+GEMINI.md
+GEMINI.local.md
+AGENTS.md
+AGENTS.local.md
 
 # IDE
 .idea/
