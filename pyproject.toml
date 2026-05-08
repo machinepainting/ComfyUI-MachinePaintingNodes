@@ -11,4 +11,4 @@ Repository = "https://github.com/machinepainting/ComfyUI-MachinePaintingNodes"
 [tool.comfy]
 PublisherId = "machinepainting"
 DisplayName = "MachinePainting Nodes"
-Icon = "👾"
+Icon = ""
