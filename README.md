@@ -292,6 +292,9 @@ pip install -r requirements.txt
 
 ## Changelog
 
+### v2.1.4
+- **Fix:** Cleared registry Icon metadata (the field expects an image URL, not an emoji) so the broken-image avatar on registry.comfy.org goes away
+
 ### v2.1.3
 - **Fix:** Aligned `pyproject.toml` and `requirements.txt` to use `opencv-python-headless` (resolves install conflicts on headless servers)
 - **Fix:** Replaced deprecated `Image.LANCZOS` with `Image.Resampling.LANCZOS` for Pillow 11+ compatibility
