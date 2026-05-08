@@ -292,6 +292,13 @@ pip install -r requirements.txt
 
 ## Changelog
 
+### v2.1.3
+- **Fix:** Aligned `pyproject.toml` and `requirements.txt` to use `opencv-python-headless` (resolves install conflicts on headless servers)
+- **Fix:** Replaced deprecated `Image.LANCZOS` with `Image.Resampling.LANCZOS` for Pillow 11+ compatibility
+- **Fix:** Pinned `numpy<3` to avoid breakage when NumPy 3 ships
+- **Update:** Standardized JS frontend imports to absolute `/scripts/app.js` paths for forward compatibility
+- **Update:** Added 👾 emoji icon to registry metadata
+
 ### v2.1.2
 - **Fix:** Frequency Separate — locked to correct Photoshop formula (Scale 2, Offset 128, Subtract), removed mode/epsilon options
 - **Fix:** Frequency Combine — locked to Linear Light blend, added opacity slider, removed mode/epsilon options

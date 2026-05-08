@@ -166,7 +166,7 @@ class ChannelMaskPro:
             def resize_channel(ch):
                 ch_uint8 = (ch * 255).astype(np.uint8)
                 pil_img = Image.fromarray(ch_uint8, mode='L')
-                pil_img = pil_img.resize((preview_w, preview_h), Image.LANCZOS)
+                pil_img = pil_img.resize((preview_w, preview_h), Image.Resampling.LANCZOS)
                 return np.array(pil_img)
             
             red_small = resize_channel(red)

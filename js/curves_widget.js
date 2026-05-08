@@ -1,4 +1,4 @@
-import { app } from "../../scripts/app.js";
+import { app } from "/scripts/app.js";
 
 // Curves Adjust Pro - Interactive curve editor widget
 app.registerExtension({

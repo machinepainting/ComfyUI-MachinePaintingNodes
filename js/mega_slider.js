@@ -1,4 +1,4 @@
-import { app } from "../../../scripts/app.js";
+import { app } from "/scripts/app.js";
 
 // Mega Slider per-slider properties and master input support
 app.registerExtension({

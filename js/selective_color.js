@@ -1,4 +1,4 @@
-import { app } from "../../scripts/app.js";
+import { app } from "/scripts/app.js";
 
 // Selective Color Pro - Reset button
 app.registerExtension({
