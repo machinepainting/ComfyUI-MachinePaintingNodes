@@ -9,6 +9,8 @@ class CurvesAdjustPro:
     Click to add points, drag to adjust, shift+click to remove points.
     Supports mask input to limit effect to specific areas.
     """
+
+    DESCRIPTION = "Photoshop-style curves with an interactive editor and 17 presets."
     
     # Color presets - all have endpoint anchors [[0,0],[1,1]]
     PRESETS = {

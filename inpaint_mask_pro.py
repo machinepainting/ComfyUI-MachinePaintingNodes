@@ -13,6 +13,8 @@ class InpaintMaskPro:
     color/opacity control per mask layer.
     """
 
+    DESCRIPTION = "Crop an inpaint mask to clean boundaries with a silhouette mask."
+
     IN_MASK_COLORS = ["red", "light_blue", "black", "white"]
     MASK_COLORS = ["lime_green", "purple", "black", "white"]
 

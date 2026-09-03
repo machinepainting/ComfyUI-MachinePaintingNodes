@@ -3,6 +3,8 @@ class ShowText:
     Display text output from other nodes.
     Useful for debugging and viewing string outputs in your workflow.
     """
+
+    DESCRIPTION = "Display a text string inside the node."
     
     @classmethod
     def INPUT_TYPES(cls):

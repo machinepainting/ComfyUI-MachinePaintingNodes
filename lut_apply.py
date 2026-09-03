@@ -11,6 +11,8 @@ class LUTApply:
     LUT files should be placed in ComfyUI/input/luts/
     Bundled LUTs are automatically copied on first use.
     """
+
+    DESCRIPTION = "Apply .cube or .3dl LUT files for colour grading."
     
     LUT_FOLDER = os.path.join(folder_paths.get_input_directory(), "luts")
     BUNDLED_LUTS = os.path.join(os.path.dirname(os.path.realpath(__file__)), "luts")

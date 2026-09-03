@@ -3,6 +3,8 @@ class TextString:
     Provide a text string to your workflow.
     Simple text input node for passing strings to other nodes.
     """
+
+    DESCRIPTION = "Simple text input for passing strings to other nodes."
     
     @classmethod
     def INPUT_TYPES(cls):

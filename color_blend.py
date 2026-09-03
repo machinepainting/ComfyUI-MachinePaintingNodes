@@ -4,6 +4,9 @@ import cv2
 
 class ColorMatchBlend:
     
+
+    DESCRIPTION = "Match colour to a reference image, then blend the result back."
+
     BLEND_MODES = ["normal", "overlay", "multiply", "screen", "soft_light", 
                    "hard_light", "color", "luminosity", "darken", "lighten"]
     
@@ -308,6 +311,8 @@ class ColorAdjustBlend:
     Optional color reference: matches color from reference, applies via blend mode, then RGB adjustments.
     Works standalone as simple color adjust if no reference provided.
     """
+
+    DESCRIPTION = "RGB colour balance for shadows, midtones and highlights."
     
     BLEND_MODES = ["normal", "overlay", "multiply", "screen", "soft_light", 
                    "hard_light", "color", "luminosity", "darken", "lighten"]

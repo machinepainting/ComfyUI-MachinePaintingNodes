@@ -4,6 +4,9 @@ import numpy as np
 import cv2
 
 class ImageBlendPro:
+
+    DESCRIPTION = "Blend two images with 15 blend modes and opacity."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {

@@ -3,6 +3,8 @@ class TextNotes:
     Simple text notes node for adding comments and documentation to your workflow.
     Does not affect the pipeline - just for organization.
     """
+
+    DESCRIPTION = "Workflow comments and notes. Does not affect the pipeline."
     
     @classmethod
     def INPUT_TYPES(cls):

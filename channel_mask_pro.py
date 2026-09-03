@@ -11,6 +11,9 @@ class ChannelMaskPro:
     Each channel is output as both an IMAGE (3-channel B&W) and MASK (single channel).
     Includes contrast/levels adjustments applied to all outputs.
     """
+
+    DESCRIPTION = "Extract R/G/B/A channels as masks, with levels and contrast."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {

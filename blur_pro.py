@@ -12,6 +12,8 @@ class BlurPro:
     Box, Median, and Motion blur. Supports mask-controlled application and in-node preview.
     """
 
+    DESCRIPTION = "Gaussian, surface, box, median and motion blur with mask support."
+
     BLUR_TYPES = ["gaussian", "surface", "box", "median", "motion"]
 
     @classmethod

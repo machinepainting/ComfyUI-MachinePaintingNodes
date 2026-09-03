@@ -3,6 +3,8 @@ class MegaSliderMasterValue:
     Master settings for Mega Sliders.
     Connect to Mega Slider nodes to control min/max/step for all sliders.
     """
+
+    DESCRIPTION = "Share one min/max/step range across Mega Slider nodes."
     
     @classmethod
     def INPUT_TYPES(cls):
@@ -28,6 +30,8 @@ class MegaSliderX1:
     Single universal slider with float/int output toggle.
     Connect Mega Slider Master Value for settings, or use right-click > Properties for overrides.
     """
+
+    DESCRIPTION = "One universal slider with float/int output."
     
     @classmethod
     def INPUT_TYPES(cls):
@@ -70,6 +74,8 @@ class MegaSliderX3:
     3 universal sliders with float/int output toggle.
     Connect Mega Slider Master Value for settings, or use right-click > Properties for per-slider overrides.
     """
+
+    DESCRIPTION = "Three universal sliders with float/int output."
     
     @classmethod
     def INPUT_TYPES(cls):
@@ -114,6 +120,8 @@ class MegaSliderX6:
     6 universal sliders with float/int output toggle.
     Connect Mega Slider Master Value for settings, or use right-click > Properties for per-slider overrides.
     """
+
+    DESCRIPTION = "Six universal sliders with float/int output."
     
     @classmethod
     def INPUT_TYPES(cls):
@@ -161,6 +169,8 @@ class MegaSliderX12:
     12 universal sliders with float/int output toggle.
     Connect Mega Slider Master Value for settings, or use right-click > Properties for per-slider overrides.
     """
+
+    DESCRIPTION = "Twelve universal sliders with float/int output."
     
     @classmethod
     def INPUT_TYPES(cls):

@@ -9,6 +9,9 @@ class HistogramView:
     """
     Displays RGB and luminance histogram with in-node preview.
     """
+
+    DESCRIPTION = "RGB and luminance histogram displayed in-node."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -119,6 +122,9 @@ class ColorWheelView:
     """
     Vectorscope-style color wheel showing color distribution.
     """
+
+    DESCRIPTION = "Vectorscope colour wheel showing hue and saturation spread."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {

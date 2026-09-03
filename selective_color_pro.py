@@ -8,6 +8,8 @@ class SelectiveColorPro:
     Adjust cyan, magenta, yellow, black for specific color ranges.
     Uses smooth falloff for natural-looking color adjustments.
     """
+
+    DESCRIPTION = "CMYK adjustments within specific colour ranges."
     
     COLOR_RANGES = ["reds", "yellows", "greens", "cyans", "blues", "magentas", "whites", "neutrals", "blacks"]
     

@@ -6,6 +6,9 @@ class LevelsAdjust:
     """
     Adjust image levels - black point, white point, gamma, and output levels.
     """
+
+    DESCRIPTION = "Black point, white point, gamma and output levels."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -49,6 +52,9 @@ class AutoLevels:
     """
     Automatically adjust image levels based on histogram analysis.
     """
+
+    DESCRIPTION = "Automatic levels correction from histogram analysis."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -108,6 +114,9 @@ class BrightnessContrastAdjust:
     """
     Simple brightness and contrast adjustment.
     """
+
+    DESCRIPTION = "Simple brightness and contrast sliders."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {

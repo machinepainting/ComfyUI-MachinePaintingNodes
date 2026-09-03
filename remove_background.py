@@ -15,6 +15,8 @@ class RemoveBackgroundPro:
     Background removal with in-node preview and mask editing tools.
     Supports multiple rembg models and provides mask refinement options.
     """
+
+    DESCRIPTION = "AI background removal with 8 models, mask refinement and transform."
     
     # Available rembg models
     MODELS = [
@@ -370,6 +372,9 @@ class MaskEditor:
     """
     Standalone mask editing node for refining any mask.
     """
+
+    DESCRIPTION = "Refine a mask: grow/shrink, blur, fill holes, threshold, invert."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -480,6 +485,9 @@ class ApplyMask:
     """
     Apply a mask to an image with various blend options.
     """
+
+    DESCRIPTION = "Composite an image with its mask over a chosen background."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {

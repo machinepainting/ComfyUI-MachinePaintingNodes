@@ -32,12 +32,7 @@ class ImageTransformPro:
 
     # ComfyUI reads DESCRIPTION (not the docstring) for the node tooltip and
     # indexes it for node search, so name the verbs the node is looked up by.
-    DESCRIPTION = (
-        "Rotate, scale, zoom and move an image inside a definable canvas. "
-        "Free or fixed 45 degree rotation, centre-zero zoom and XY placement. "
-        "An optional mask is transformed with the image and cuts it out over a "
-        "transparent, black or white background."
-    )
+    DESCRIPTION = "Rotate, scale and move an image and its mask on a set canvas."
 
     ROTATION_METHODS = ["free", "fixed"]
     BACKGROUNDS = ["transparent", "black", "white"]

@@ -10,6 +10,8 @@ class Boolean:
     MachinePaintingNodes - For use with boolean toggle inputs on nodes. 
     """
 
+    DESCRIPTION = "Standalone true/false toggle."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -39,6 +41,9 @@ class BooleanInvert:
     """
     Inverts a boolean value. True becomes False, False becomes True.
     """
+
+    DESCRIPTION = "Flip a boolean: true becomes false, false becomes true."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -57,6 +62,9 @@ class BooleanInvert:
 
 
 class BooleanSwitchValueOutput:
+
+    DESCRIPTION = "Output one of two values depending on a boolean."
+
     TITLE = "Boolean Switch Value - (INT/FLOAT)"
 
     @classmethod
@@ -95,6 +103,9 @@ class BooleanSwitchValueOutput:
 
 
 class BooleanInputValueSwitch:
+
+    DESCRIPTION = "Route one of two inputs through based on a boolean."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -178,6 +189,9 @@ class BooleanInputValueSwitch:
 
 
 class BooleanMasterSwitch:
+
+    DESCRIPTION = "Drive several boolean outputs from one master toggle."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {

@@ -9,6 +9,8 @@ class ImageMaskSwitch:
     Mask to Image: converts single-channel mask to 3-channel RGB image.
     """
 
+    DESCRIPTION = "Convert between IMAGE and MASK with a toggle."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {

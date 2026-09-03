@@ -4,6 +4,9 @@ class SeedLock:
     When locked, outputs the locked_seed value.
     When unlocked, outputs the input seed value.
     """
+
+    DESCRIPTION = "Lock a seed to reuse it, or pass the incoming seed through."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {

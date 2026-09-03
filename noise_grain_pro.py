@@ -12,6 +12,8 @@ class NoiseGrainPro:
     sharpness, color vs mono, saturation, and blend mode.
     """
 
+    DESCRIPTION = "Film grain and noise with size, sharpness and 6 blend modes."
+
     BLEND_MODES = ["overlay", "soft_light", "hard_light", "linear_light", "multiply", "screen"]
 
     @classmethod

@@ -6,6 +6,8 @@ class ZImageEmptyLatentImage:
     Empty Latent Image node with Z-Image recommended resolutions.
     Supports resolutions from 512x512 to 2048x2048 optimized for Z-Image model.
     """
+
+    DESCRIPTION = "Empty latent using Z-Image recommended resolutions."
     
     @classmethod
     def INPUT_TYPES(cls):

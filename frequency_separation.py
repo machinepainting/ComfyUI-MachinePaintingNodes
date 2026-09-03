@@ -11,6 +11,8 @@ class FrequencySeparate:
     The high frequency output is a neutral gray layer containing texture/detail only.
     """
 
+    DESCRIPTION = "Split an image into high and low frequency layers."
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -47,6 +49,8 @@ class FrequencyCombine:
     Opacity controls how much texture (high frequency) is applied.
     At 0: just the low frequency (smooth). At 1: full reconstruction.
     """
+
+    DESCRIPTION = "Recombine high and low frequency layers with Linear Light."
 
     @classmethod
     def INPUT_TYPES(cls):

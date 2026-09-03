@@ -9,6 +9,8 @@ any_type = AnyType("*")
 
 class ShowValue:
     """Display any data type in the node."""
+
+    DESCRIPTION = "Display any value inside the node."
     
     @classmethod
     def INPUT_TYPES(cls):

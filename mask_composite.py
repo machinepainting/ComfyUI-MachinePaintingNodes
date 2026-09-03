@@ -124,9 +124,15 @@ class _MaskCompositeBase:
 
 class MaskCompositePro2X(_MaskCompositeBase):
     """Combine 2 masks with per-mask blur, grow/shrink, and opacity."""
+
+    DESCRIPTION = "Combine 2 masks with per-mask blur, grow/shrink and opacity."
+
     MAX_MASKS = 2
 
 
 class MaskCompositePro6X(_MaskCompositeBase):
     """Combine up to 6 masks with per-mask blur, grow/shrink, and opacity."""
+
+    DESCRIPTION = "Combine up to 6 masks with per-mask blur, grow/shrink and opacity."
+
     MAX_MASKS = 6

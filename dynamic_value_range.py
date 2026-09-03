@@ -6,6 +6,8 @@ class DynamicValueRange:
     Automatically cycles through a range of values on each run.
     Use to create diversity in settings across multiple generations.
     """
+
+    DESCRIPTION = "Step through a range of values, one per run."
     
     # Class variable to track current values per node instance
     _state = {}
