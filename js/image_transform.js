@@ -9,7 +9,7 @@ import { app } from "/scripts/app.js";
 const SNAP_DEGREES = 45;
 
 const TARGETS = {
-    ImageRotate: {
+    MP_ImageRotate: {
         toggle: null,
         controlled: [],
     },
@@ -35,22 +35,17 @@ function setAngleStep(widget, fixed) {
     }
 }
 
+// Hide via the boolean `hidden` flag. That is what the frontend actually
+// checks: isWidgetVisible() and getLayoutWidgets() both key off it, and a
+// hidden widget is dropped from the layout pass entirely.
+//
+// Do NOT hide by setting `type = "hidden"` - there is no such widget type.
+// The widget stays "visible" to the layout pass, gets laid out at zero
+// height, and draws on top of the widgets below it, which pushes the node's
+// preview image up over the sliders.
 function toggleWidget(widget, show) {
     if (!widget) return;
-
-    if (show) {
-        if (widget._mpHidden) {
-            widget.type = widget._mpType;
-            delete widget.computeSize;
-            delete widget._mpType;
-            delete widget._mpHidden;
-        }
-    } else if (!widget._mpHidden) {
-        widget._mpType = widget.type;
-        widget._mpHidden = true;
-        widget.type = "hidden";
-        widget.computeSize = () => [0, -4];
-    }
+    widget.hidden = !show;
 }
 
 app.registerExtension({
@@ -72,10 +67,11 @@ app.registerExtension({
                     toggleWidget(find(name), enabled);
                 }
                 // Only reflow on an actual user toggle, so loading a workflow
-                // doesn't undo a manually resized node.
-                if (resize) {
-                    this.setSize([this.size[0], this.computeSize()[1]]);
-                }
+                // doesn't undo a manually resized node. expandToFitContent is
+                // litegraph's own helper: it grows the node to clear the newly
+                // shown widgets and never shrinks it, so the preview image
+                // keeps the room it already had.
+                if (resize) this.expandToFitContent?.();
             }
 
             this.setDirtyCanvas(true, true);
