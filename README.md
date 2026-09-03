@@ -18,7 +18,7 @@ A comprehensive node suite for professional level image processing, color correc
 | **Mask Composite Pro 2X** | Mask | 2026-03-28 |
 | **Mask Composite Pro 6X** | Mask | 2026-03-28 |
 | **Image <> Mask Switch** | Utilities | 2026-03-27 |
-| **Transform & Rotate Pro** | Rotate & Scale | 2026-09-03 |
+| **Transform & Rotate Pro** | Transform | 2026-09-03 |
 
 ---
 
@@ -96,7 +96,7 @@ pip install -r requirements.txt
 |------|-------------|
 | **Image Blend Pro** | Blend images with 15 blend modes (normal, overlay, multiply, screen, soft light, hard light, etc.) |
 
-### Rotate & Scale
+### Transform
 
 | Node | Description |
 |------|-------------|
@@ -320,7 +320,7 @@ pip install -r requirements.txt
 - **Remove Background Pro:** added a rotation block at the bottom of the settings (enable toggle, free/fixed method, angle slider, centre-zero zoom slider, XY placement). Applied after removal so segmentation always runs on the upright image, and the canvas stays at the original size
 - **New:** shared `transform_utils` module so both nodes use identical rotate/zoom/offset math
 - **Placement convention:** on both nodes the angle slider reads counter-clockwise to the left and clockwise to the right, and the XY sliders move the image right for positive X and **up** for positive Y (note this is the opposite sign to Photoshop's transform Y, chosen so both sliders read the same way)
-- Transform & Rotate Pro lives under `MachinePaintingNodes / Rotate & Scale`
+- Transform & Rotate Pro lives under `MachinePaintingNodes / Transform`
 
 ### v2.1.4
 - **Fix:** Cleared registry Icon metadata (the field expects an image URL, not an emoji) so the broken-image avatar on registry.comfy.org goes away

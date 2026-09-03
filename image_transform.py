@@ -105,7 +105,7 @@ class TransformRotatePro:
     RETURN_NAMES = ("image", "mask", "mask_bw")
     OUTPUT_NODE = True
     FUNCTION = "rotate_image"
-    CATEGORY = "MachinePaintingNodes/Rotate & Scale"
+    CATEGORY = "MachinePaintingNodes/Transform"
 
     def rotate_image(self, image, mask=None, canvas_width=0, canvas_height=0,
                      background="transparent", rotation_method="free",
