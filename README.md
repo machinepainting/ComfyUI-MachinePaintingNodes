@@ -78,7 +78,7 @@ pip install -r requirements.txt
 
 | Node | Description |
 |------|-------------|
-| **Remove Background Pro** | Advanced AI-powered background removal with 8 rembg models, mask editing tools, multiple preview modes, and optional rotation / XY placement applied to every output |
+| **Remove Background Pro** | Advanced AI-powered background removal with 8 rembg models, mask editing tools, multiple preview modes, and optional rotation / zoom / XY placement applied to every output |
 | **Mask Editor** | Stand alone Mask Tools. Refine masks with grow/shrink/blur/fill |
 | **Apply Mask** | Composite image with mask and background options |
 | **Channel Mask Pro** | Extract R/G/B/A channels as separate masks with levels/contrast adjustments and input mask support for advanced Channel Masking |
@@ -100,7 +100,7 @@ pip install -r requirements.txt
 
 | Node | Description |
 |------|-------------|
-| **Image Rotate** | Rotate, zoom and reposition an image inside a definable canvas. Free rotation or fixed 45 degree snapping, centre-zero zoom slider, XY placement, and an optional mask input that rides the same transform so it stays registered to the image. |
+| **Image Rotate** | Rotate, zoom and reposition an image inside a definable canvas. Free rotation or fixed 45 degree snapping, centre-zero zoom slider, XY placement, and an optional mask input that rides the same transform and cuts the image out over the selected background. |
 
 ### Analysis
 
@@ -208,7 +208,7 @@ pip install -r requirements.txt
 - **Zoom** slider centred on 0 (1.0x), exponential: -100 = 0.25x, -50 = 0.5x, +50 = 2x, +100 = 4x
 - **XY placement** sliders as a percent of canvas, so they keep working when the canvas or source size changes
 - Source is fitted inside the canvas first, then zoom is applied, so zoom 0 always shows the whole image
-- Optional **mask input** is transformed by the identical matrix and stays registered to the image
+- Optional **mask input** is transformed by the identical matrix, stays registered to the image, and cuts the image out: whatever the mask leaves out is filled with the selected background
 - Background select: transparent, black or white. With no mask supplied, the transformed image extent becomes the mask
 - Lanczos resampling, in-node preview with a transparency grid
 
@@ -248,7 +248,8 @@ pip install -r requirements.txt
 - Built-in mask refinement (grow/shrink, blur, threshold)
 - Preview modes: masked, mask only, side-by-side, overlay
 - Edge feathering for smooth composites
-- **Rotation** toggle with free or fixed (45 degree snap) methods, centre-zero angle slider (CCW left, CW right) and XY placement sliders
+- **Rotation** toggle with free or fixed (45 degree snap) methods, centre-zero angle slider (CCW left, CW right), centre-zero zoom slider and XY placement sliders
+- Zoom matches the Image Rotate node (-100 = 0.25x, -50 = 0.5x, +50 = 2x, +100 = 4x). The canvas never grows, so zooming in crops and zooming out leaves empty edges
 - Rotation runs *after* removal, so rembg always segments the upright image, and image, mask and masked outputs all ride the same transform
 
 ### Channel Mask Pro
@@ -313,8 +314,8 @@ pip install -r requirements.txt
 ## Changelog
 
 ### v2.2.0
-- **New Node:** Image Rotate - rotate, zoom and reposition an image inside a definable canvas, with an optional mask input that rides the same transform. Free or fixed (45 degree snap) rotation, centre-zero angle and zoom sliders, percent-based XY placement, and transparent/black/white background fill
-- **Remove Background Pro:** added a rotation block at the bottom of the settings (enable toggle, free/fixed method, angle slider, XY placement). Applied after removal so segmentation always runs on the upright image, and the canvas stays at the original size
+- **New Node:** Image Rotate - rotate, zoom and reposition an image inside a definable canvas, with an optional mask input that rides the same transform and cuts the image out over the selected background. Free or fixed (45 degree snap) rotation, centre-zero angle and zoom sliders, percent-based XY placement, and transparent/black/white background fill
+- **Remove Background Pro:** added a rotation block at the bottom of the settings (enable toggle, free/fixed method, angle slider, centre-zero zoom slider, XY placement). Applied after removal so segmentation always runs on the upright image, and the canvas stays at the original size
 - **New:** shared `transform_utils` module so both nodes use identical rotate/zoom/offset math
 
 ### v2.1.4

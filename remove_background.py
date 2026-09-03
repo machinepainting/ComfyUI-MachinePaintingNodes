@@ -5,7 +5,9 @@ from PIL import Image
 import folder_paths
 import os
 
-from .transform_utils import build_matrix, snap_angle, warp_image, warp_single
+from .transform_utils import (
+    build_matrix, snap_angle, warp_image, warp_single, zoom_to_scale
+)
 
 
 class RemoveBackgroundPro:
@@ -93,6 +95,13 @@ class RemoveBackgroundPro:
                     "step": 0.1,
                     "display": "slider"
                 }),
+                "zoom": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -100.0,
+                    "max": 100.0,
+                    "step": 0.1,
+                    "display": "slider"
+                }),
                 "offset_x": ("FLOAT", {
                     "default": 0.0,
                     "min": -100.0,
@@ -127,7 +136,8 @@ class RemoveBackgroundPro:
                           alpha_matting_background_threshold=10,
                           alpha_matting_erode_size=10,
                           enable_rotation=False, rotation_method="free",
-                          rotation_angle=0.0, offset_x=0.0, offset_y=0.0,
+                          rotation_angle=0.0, zoom=0.0,
+                          offset_x=0.0, offset_y=0.0,
                           unique_id=None):
         
         # Import rembg here to avoid loading if not used
@@ -182,16 +192,20 @@ class RemoveBackgroundPro:
         if invert_mask:
             mask = 1.0 - mask
 
-        # Rotation / placement. Applied after removal so rembg always segments
-        # the upright image. Image and mask ride the same matrix, and the canvas
-        # stays at the original size, so every output remains registered.
+        # Rotation / zoom / placement. Applied after removal so rembg always
+        # segments the upright image. Image and mask ride the same matrix, and
+        # the canvas stays at the original size, so every output stays
+        # registered. Zoom is centred on 0 (1.0x) and exponential, matching the
+        # Image Rotate node; the canvas never grows, so zooming in crops and
+        # zooming out leaves empty edges (image black, mask 0).
         img_float = img_np.astype(np.float32) / 255.0
         passthrough = image
 
         if enable_rotation:
             angle = snap_angle(rotation_angle, rotation_method)
+            scale = zoom_to_scale(zoom)
             dst_shape = img_float.shape[:2]
-            M = build_matrix(img_float.shape, dst_shape, angle, 1.0, offset_x, offset_y)
+            M = build_matrix(img_float.shape, dst_shape, angle, scale, offset_x, offset_y)
 
             img_float = warp_image(img_float, M, dst_shape)
             mask = warp_single(mask, M, dst_shape)

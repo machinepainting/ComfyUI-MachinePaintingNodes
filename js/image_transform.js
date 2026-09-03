@@ -15,7 +15,7 @@ const TARGETS = {
     },
     RemoveBackgroundPro: {
         toggle: "enable_rotation",
-        controlled: ["rotation_method", "rotation_angle", "offset_x", "offset_y"],
+        controlled: ["rotation_method", "rotation_angle", "zoom", "offset_x", "offset_y"],
     },
 };
 
