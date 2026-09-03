@@ -88,7 +88,7 @@ NODE_CLASS_MAPPINGS = {
     "MaskCompositePro2X": MaskCompositePro2X,
     "MaskCompositePro6X": MaskCompositePro6X,
     # Transform
-    "ImageRotate": ImageRotate,
+    "MP_ImageRotate": ImageRotate,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -142,7 +142,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "MaskCompositePro2X": "👾 Mask Composite Pro 2X",
     "MaskCompositePro6X": "👾 Mask Composite Pro 6X",
     # Transform
-    "ImageRotate": "👾 Image Rotate",
+    "MP_ImageRotate": "👾 Image Rotate",
 }
 
 WEB_DIRECTORY = "./js"
