@@ -1,7 +1,7 @@
 # __init__.py
 
 """
-ComfyUI-MachinePaintingNodes v2.1.4
+ComfyUI-MachinePaintingNodes v2.2.0
 Professional color grading, mask tools, filters, and utilities for ComfyUI
 """
 
@@ -35,6 +35,7 @@ from .frequency_separation import FrequencySeparate, FrequencyCombine
 from .noise_grain_pro import NoiseGrainPro
 from .inpaint_mask_pro import InpaintMaskPro
 from .mask_composite import MaskCompositePro2X, MaskCompositePro6X
+from .image_rotate import ImageRotate
 
 NODE_CLASS_MAPPINGS = {
     # Color Adjustment
@@ -86,6 +87,8 @@ NODE_CLASS_MAPPINGS = {
     "InpaintMaskPro": InpaintMaskPro,
     "MaskCompositePro2X": MaskCompositePro2X,
     "MaskCompositePro6X": MaskCompositePro6X,
+    # Transform
+    "ImageRotate": ImageRotate,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -138,9 +141,11 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "InpaintMaskPro": "👾 Inpaint Mask Pro",
     "MaskCompositePro2X": "👾 Mask Composite Pro 2X",
     "MaskCompositePro6X": "👾 Mask Composite Pro 6X",
+    # Transform
+    "ImageRotate": "👾 Image Rotate",
 }
 
 WEB_DIRECTORY = "./js"
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
 
-print("ComfyUI-MachinePaintingNodes v2.1.4: Loaded 40 nodes")
+print("ComfyUI-MachinePaintingNodes v2.2.0: Loaded 41 nodes")

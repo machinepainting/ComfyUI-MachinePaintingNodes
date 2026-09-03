@@ -18,6 +18,7 @@ A comprehensive node suite for professional level image processing, color correc
 | **Mask Composite Pro 2X** | Mask | 2026-03-28 |
 | **Mask Composite Pro 6X** | Mask | 2026-03-28 |
 | **Image <> Mask Switch** | Utilities | 2026-03-27 |
+| **Image Rotate** | Transform | 2026-09-03 |
 
 ---
 
@@ -42,7 +43,7 @@ pip install -r requirements.txt
 
 ---
 
-## Nodes (40 Total)
+## Nodes (41 Total)
 
 ### Color Adjustment
 
@@ -77,7 +78,7 @@ pip install -r requirements.txt
 
 | Node | Description |
 |------|-------------|
-| **Remove Background Pro** | Advanced AI-powered background removal with 8 rembg models, mask editing tools, multiple preview modes |
+| **Remove Background Pro** | Advanced AI-powered background removal with 8 rembg models, mask editing tools, multiple preview modes, and optional rotation / XY placement applied to every output |
 | **Mask Editor** | Stand alone Mask Tools. Refine masks with grow/shrink/blur/fill |
 | **Apply Mask** | Composite image with mask and background options |
 | **Channel Mask Pro** | Extract R/G/B/A channels as separate masks with levels/contrast adjustments and input mask support for advanced Channel Masking |
@@ -94,6 +95,12 @@ pip install -r requirements.txt
 | Node | Description |
 |------|-------------|
 | **Image Blend Pro** | Blend images with 15 blend modes (normal, overlay, multiply, screen, soft light, hard light, etc.) |
+
+### Transform
+
+| Node | Description |
+|------|-------------|
+| **Image Rotate** | Rotate, zoom and reposition an image inside a definable canvas. Free rotation or fixed 45 degree snapping, centre-zero zoom slider, XY placement, and an optional mask input that rides the same transform so it stays registered to the image. |
 
 ### Analysis
 
@@ -194,6 +201,17 @@ pip install -r requirements.txt
 - Mask-to-image: expands single-channel mask to 3-channel RGB
 - Both outputs always populated for stable downstream connections
 
+### Image Rotate
+- **Canvas W/H** inputs (0 = match the incoming image) define the frame the image rotates inside
+- **Free** rotation, or **fixed** snapping to 45 degree increments
+- Angle slider centred on 0: counter-clockwise to the left, clockwise to the right
+- **Zoom** slider centred on 0 (1.0x), exponential: -100 = 0.25x, -50 = 0.5x, +50 = 2x, +100 = 4x
+- **XY placement** sliders as a percent of canvas, so they keep working when the canvas or source size changes
+- Source is fitted inside the canvas first, then zoom is applied, so zoom 0 always shows the whole image
+- Optional **mask input** is transformed by the identical matrix and stays registered to the image
+- Background select: transparent, black or white. With no mask supplied, the transformed image extent becomes the mask
+- Lanczos resampling, in-node preview with a transparency grid
+
 ### Curves Adjust Pro
 - Interactive curve editor with click-to-add, drag-to-move, shift-click-to-remove points
 - Separate RGB, Red, Green, Blue channel curve editing
@@ -230,6 +248,8 @@ pip install -r requirements.txt
 - Built-in mask refinement (grow/shrink, blur, threshold)
 - Preview modes: masked, mask only, side-by-side, overlay
 - Edge feathering for smooth composites
+- **Rotation** toggle with free or fixed (45 degree snap) methods, centre-zero angle slider (CCW left, CW right) and XY placement sliders
+- Rotation runs *after* removal, so rembg always segments the upright image, and image, mask and masked outputs all ride the same transform
 
 ### Channel Mask Pro
 - Separates image into R, G, B, Alpha channel masks
@@ -291,6 +311,11 @@ pip install -r requirements.txt
 ---
 
 ## Changelog
+
+### v2.2.0
+- **New Node:** Image Rotate - rotate, zoom and reposition an image inside a definable canvas, with an optional mask input that rides the same transform. Free or fixed (45 degree snap) rotation, centre-zero angle and zoom sliders, percent-based XY placement, and transparent/black/white background fill
+- **Remove Background Pro:** added a rotation block at the bottom of the settings (enable toggle, free/fixed method, angle slider, XY placement). Applied after removal so segmentation always runs on the upright image, and the canvas stays at the original size
+- **New:** shared `transform_utils` module so both nodes use identical rotate/zoom/offset math
 
 ### v2.1.4
 - **Fix:** Cleared registry Icon metadata (the field expects an image URL, not an emoji) so the broken-image avatar on registry.comfy.org goes away
