@@ -4,7 +4,7 @@ import numpy as np
 """
 Shared geometric transform helpers.
 
-Used by ImageTransformPro and RemoveBackgroundPro so both nodes run identical
+Used by TransformRotatePro and RemoveBackgroundPro so both nodes run identical
 rotate / zoom / offset math and stay registered to each other.
 
 Conventions:

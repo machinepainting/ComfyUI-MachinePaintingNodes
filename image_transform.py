@@ -17,7 +17,7 @@ from .transform_utils import (
 )
 
 
-class ImageTransformPro:
+class TransformRotatePro:
     """
     Rotate, scale and reposition an image inside a definable canvas.
 

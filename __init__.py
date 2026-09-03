@@ -35,7 +35,7 @@ from .frequency_separation import FrequencySeparate, FrequencyCombine
 from .noise_grain_pro import NoiseGrainPro
 from .inpaint_mask_pro import InpaintMaskPro
 from .mask_composite import MaskCompositePro2X, MaskCompositePro6X
-from .image_transform import ImageTransformPro
+from .image_transform import TransformRotatePro
 
 NODE_CLASS_MAPPINGS = {
     # Color Adjustment
@@ -88,7 +88,8 @@ NODE_CLASS_MAPPINGS = {
     "MaskCompositePro2X": MaskCompositePro2X,
     "MaskCompositePro6X": MaskCompositePro6X,
     # Transform
-    "MP_ImageTransform": ImageTransformPro,
+    # Key stays MP_ImageTransform so already-placed nodes keep working
+    "MP_ImageTransform": TransformRotatePro,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -142,7 +143,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "MaskCompositePro2X": "👾 Mask Composite Pro 2X",
     "MaskCompositePro6X": "👾 Mask Composite Pro 6X",
     # Transform
-    "MP_ImageTransform": "👾 Image Transform Pro",
+    "MP_ImageTransform": "👾 Transform & Rotate Pro",
 }
 
 WEB_DIRECTORY = "./js"
