@@ -12,7 +12,9 @@ Conventions:
               counter-clockwise (slider left).
   zoom        -100..100, centred on 0. Exponential, see zoom_to_scale().
   offset_x/y  percent (-100..100) of the destination canvas. Positive x moves
-              right, positive y moves down (same as the Photoshop transform Y).
+              right, positive y moves UP, so both sliders read the same way:
+              drag right for right/up, drag left for left/down. Note this is
+              the opposite sign to a raw pixel Y, which grows downward.
 """
 
 # Snap increment used by the "fixed" rotation method
@@ -55,9 +57,11 @@ def build_matrix(src_shape, dst_shape, angle, scale, offset_x=0.0, offset_y=0.0)
     # the left of the slider and CW on the right.
     M = cv2.getRotationMatrix2D((src_cx, src_cy), -float(angle), float(scale))
 
-    # Re-centre on the canvas, then apply the percent offsets
+    # Re-centre on the canvas, then apply the percent offsets. offset_y is
+    # negated so a positive value moves the image UP: canvas Y grows downward,
+    # so subtracting shifts toward the top.
     M[0, 2] += (dst_cx - src_cx) + (float(offset_x) / 100.0) * dst_w
-    M[1, 2] += (dst_cy - src_cy) + (float(offset_y) / 100.0) * dst_h
+    M[1, 2] += (dst_cy - src_cy) - (float(offset_y) / 100.0) * dst_h
 
     return M
 

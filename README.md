@@ -96,7 +96,7 @@ pip install -r requirements.txt
 |------|-------------|
 | **Image Blend Pro** | Blend images with 15 blend modes (normal, overlay, multiply, screen, soft light, hard light, etc.) |
 
-### Rotate / Scale
+### Rotate & Scale
 
 | Node | Description |
 |------|-------------|
