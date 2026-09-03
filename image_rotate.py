@@ -25,7 +25,9 @@ class ImageRotate:
     right. The "fixed" method snaps the angle to 45 degree increments. Zoom is
     centred on 0 (1.0x) and exponential: -100 = 0.25x, -50 = 0.5x, +50 = 2x,
     +100 = 4x. An optional mask input rides the exact same matrix so it stays
-    registered to the image.
+    registered to the image, and cuts the image out: whatever the mask leaves
+    out is filled with the selected background. With no mask supplied, the
+    transformed image extent becomes the mask.
     """
 
     ROTATION_METHODS = ["free", "fixed"]
@@ -125,23 +127,26 @@ class ImageRotate:
         warped = warp_image(img, M, dst_shape)
         coverage = coverage_mask(img.shape, M, dst_shape)
 
-        # An incoming mask rides the same matrix so it stays aligned. Without
-        # one, the transformed image extent becomes the mask.
+        # An incoming mask rides the same matrix so it stays aligned, and it
+        # decides what stays visible in the image. Without one, the transformed
+        # image extent becomes the mask.
         if mask is not None:
             mask_np = normalize_mask(mask, (src_h, src_w))
-            out_mask = warp_single(mask_np, M, dst_shape)
+            # Multiply by coverage so the mask can never claim area outside the
+            # transformed image, even when it is white right to its own edges.
+            out_mask = warp_single(mask_np, M, dst_shape) * coverage
         else:
             out_mask = coverage
 
-        # Fill whatever the transform left empty. "transparent" is carried by
-        # the mask output, since a ComfyUI IMAGE tensor has no alpha channel.
+        # Fill everything that isn't visible. "transparent" is carried by the
+        # mask output, since a ComfyUI IMAGE tensor has no alpha channel.
         if background == "white":
             bg = np.ones((dst_h, dst_w, 3), dtype=np.float32)
         else:
             bg = np.zeros((dst_h, dst_w, 3), dtype=np.float32)
 
-        cov_3ch = np.expand_dims(coverage, axis=-1)
-        result = warped * cov_3ch + bg * (1.0 - cov_3ch)
+        vis_3ch = np.expand_dims(out_mask, axis=-1)
+        result = warped * vis_3ch + bg * (1.0 - vis_3ch)
         result = np.clip(result, 0.0, 1.0)
 
         # Build outputs
@@ -154,7 +159,7 @@ class ImageRotate:
         # Preview
         if background == "transparent":
             grid = transparency_grid(result.shape)
-            preview = (result * 255.0) * cov_3ch + grid * (1.0 - cov_3ch)
+            preview = (result * 255.0) * vis_3ch + grid * (1.0 - vis_3ch)
             preview_img = np.clip(preview, 0, 255).astype(np.uint8)
         else:
             preview_img = (result * 255.0).astype(np.uint8)
