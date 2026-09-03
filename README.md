@@ -18,7 +18,7 @@ A comprehensive node suite for professional level image processing, color correc
 | **Mask Composite Pro 2X** | Mask | 2026-03-28 |
 | **Mask Composite Pro 6X** | Mask | 2026-03-28 |
 | **Image <> Mask Switch** | Utilities | 2026-03-27 |
-| **Image Rotate** | Transform | 2026-09-03 |
+| **Image Transform Pro** | Transform | 2026-09-03 |
 
 ---
 
@@ -100,7 +100,7 @@ pip install -r requirements.txt
 
 | Node | Description |
 |------|-------------|
-| **Image Rotate** | Rotate, zoom and reposition an image inside a definable canvas. Free rotation or fixed 45 degree snapping, centre-zero zoom slider, XY placement, and an optional mask input that rides the same transform and cuts the image out over the selected background. |
+| **Image Transform Pro** | Rotate, scale and reposition an image inside a definable canvas. Free rotation or fixed 45 degree snapping, centre-zero zoom slider, XY placement, and an optional mask input that rides the same transform and cuts the image out over the selected background. |
 
 ### Analysis
 
@@ -201,7 +201,7 @@ pip install -r requirements.txt
 - Mask-to-image: expands single-channel mask to 3-channel RGB
 - Both outputs always populated for stable downstream connections
 
-### Image Rotate
+### Image Transform Pro
 - **Canvas W/H** inputs (0 = match the incoming image) define the frame the image rotates inside
 - **Free** rotation, or **fixed** snapping to 45 degree increments
 - Angle slider centred on 0: counter-clockwise to the left, clockwise to the right
@@ -249,7 +249,7 @@ pip install -r requirements.txt
 - Preview modes: masked, mask only, side-by-side, overlay
 - Edge feathering for smooth composites
 - **Rotation** toggle with free or fixed (45 degree snap) methods, centre-zero angle slider (CCW left, CW right), centre-zero zoom slider and XY placement sliders
-- Zoom matches the Image Rotate node (-100 = 0.25x, -50 = 0.5x, +50 = 2x, +100 = 4x). The canvas never grows, so zooming in crops and zooming out leaves empty edges
+- Zoom matches the Image Transform Pro node (-100 = 0.25x, -50 = 0.5x, +50 = 2x, +100 = 4x). The canvas never grows, so zooming in crops and zooming out leaves empty edges
 - Rotation runs *after* removal, so rembg always segments the upright image, and image, mask and masked outputs all ride the same transform
 
 ### Channel Mask Pro
@@ -314,7 +314,7 @@ pip install -r requirements.txt
 ## Changelog
 
 ### v2.2.0
-- **New Node:** Image Rotate - rotate, zoom and reposition an image inside a definable canvas, with an optional mask input that rides the same transform and cuts the image out over the selected background. Free or fixed (45 degree snap) rotation, centre-zero angle and zoom sliders, percent-based XY placement, and transparent/black/white background fill
+- **New Node:** Image Transform Pro - rotate, scale and reposition an image inside a definable canvas, with an optional mask input that rides the same transform and cuts the image out over the selected background. Free or fixed (45 degree snap) rotation, centre-zero angle and zoom sliders, percent-based XY placement, and transparent/black/white background fill
 - **Remove Background Pro:** added a rotation block at the bottom of the settings (enable toggle, free/fixed method, angle slider, centre-zero zoom slider, XY placement). Applied after removal so segmentation always runs on the upright image, and the canvas stays at the original size
 - **New:** shared `transform_utils` module so both nodes use identical rotate/zoom/offset math
 

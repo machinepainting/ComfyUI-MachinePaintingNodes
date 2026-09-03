@@ -1,6 +1,6 @@
 import { app } from "/scripts/app.js";
 
-// Rotation controls shared by Image Rotate and Remove Background Pro:
+// Rotation controls shared by Image Transform Pro and Remove Background Pro:
 //   - the "fixed" method snaps the angle slider to 45 degree increments
 //   - Remove Background Pro hides its rotation widgets until the toggle is on
 // Python snaps the angle too, so the result is correct even if the frontend
@@ -9,7 +9,7 @@ import { app } from "/scripts/app.js";
 const SNAP_DEGREES = 45;
 
 const TARGETS = {
-    MP_ImageRotate: {
+    MP_ImageTransform: {
         toggle: null,
         controlled: [],
     },

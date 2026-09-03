@@ -196,7 +196,7 @@ class RemoveBackgroundPro:
         # segments the upright image. Image and mask ride the same matrix, and
         # the canvas stays at the original size, so every output stays
         # registered. Zoom is centred on 0 (1.0x) and exponential, matching the
-        # Image Rotate node; the canvas never grows, so zooming in crops and
+        # Image Transform Pro node; the canvas never grows, so zooming in crops and
         # zooming out leaves empty edges (image black, mask 0).
         img_float = img_np.astype(np.float32) / 255.0
         passthrough = image

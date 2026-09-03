@@ -17,9 +17,9 @@ from .transform_utils import (
 )
 
 
-class ImageRotate:
+class ImageTransformPro:
     """
-    Rotate, zoom and reposition an image inside a definable canvas.
+    Rotate, scale and reposition an image inside a definable canvas.
 
     Rotation reads counter-clockwise to the left of centre and clockwise to the
     right. The "fixed" method snaps the angle to 45 degree increments. Zoom is
@@ -29,6 +29,15 @@ class ImageRotate:
     out is filled with the selected background. With no mask supplied, the
     transformed image extent becomes the mask.
     """
+
+    # ComfyUI reads DESCRIPTION (not the docstring) for the node tooltip and
+    # indexes it for node search, so name the verbs the node is looked up by.
+    DESCRIPTION = (
+        "Rotate, scale, zoom and move an image inside a definable canvas. "
+        "Free or fixed 45 degree rotation, centre-zero zoom and XY placement. "
+        "An optional mask is transformed with the image and cuts it out over a "
+        "transparent, black or white background."
+    )
 
     ROTATION_METHODS = ["free", "fixed"]
     BACKGROUNDS = ["transparent", "black", "white"]
@@ -173,7 +182,7 @@ class ImageRotate:
 
     def _save_preview(self, img_np, unique_id):
         temp_dir = folder_paths.get_temp_directory()
-        filename = f"image_rotate_{unique_id}.png"
+        filename = f"image_transform_{unique_id}.png"
         filepath = os.path.join(temp_dir, filename)
         img_pil = Image.fromarray(img_np, mode='RGB')
         img_pil.save(filepath)
